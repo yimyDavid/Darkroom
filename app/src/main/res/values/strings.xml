@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Darkroom</string>
+    <string name="action_OpenGallery">Open Gallery</string>
+</resources>
