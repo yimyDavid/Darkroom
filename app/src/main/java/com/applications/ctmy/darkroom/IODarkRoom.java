@@ -1,6 +1,7 @@
 package com.applications.ctmy.darkroom;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -27,11 +29,15 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
+import org.opencv.core.MatOfFloat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class IODarkRoom extends AppCompatActivity {
 
@@ -44,20 +50,20 @@ public class IODarkRoom extends AppCompatActivity {
 
     // Variables to handle user clicks on the menu
     private static final int SELECT_PICTURE = 1;
-    private String selectedImagePath = "/storage/emulated/0/Pictures/Screenshots/Screenshot.png";
+    private String selectedImagePath;
     Mat sampledImage;
     Mat originalImage;
 
 
-    static{
-        System.loadLibrary("opencv_java3");
-
-        if(!OpenCVLoader.initDebug()){
-            Log.d("ERROR", "Unable to load OpenCV");
-        }else{
-            Log.d("SUCCESS", "OpenCV loaded");
-        }
-    }
+//    static{
+//        System.loadLibrary("opencv_java3");
+//
+//        if(!OpenCVLoader.initDebug()){
+//            Log.d("ERROR", "Unable to load OpenCV");
+//        }else{
+//            Log.d("SUCCESS", "OpenCV loaded");
+//        }
+//    }
 
 
 
@@ -91,9 +97,57 @@ public class IODarkRoom extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"),
                     SELECT_PICTURE);
             return true;
+        }else if(id == R.id.action_Hist){
+            if(sampledImage == null){
+                Context context = getApplicationContext();
+                CharSequence text = "You need to load an image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return true;
+            }
+            Mat histImage = new Mat();
+            sampledImage.copyTo(histImage);
+            calcHist(histImage);
+            displayImage(histImage);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void calcHist(Mat image){
+        int mHistSizeNum = 25;
+        MatOfInt mHistSize = new MatOfInt(mHistSizeNum);
+        Mat hist = new Mat();
+        float [] mBuff = new float[mHistSizeNum];
+        MatOfFloat histogramRanges = new MatOfFloat(0f, 256f);
+        Scalar mColorSRGB[] = new Scalar[]{new Scalar(200,0,0,255),
+                                           new Scalar(0,200,0,255),
+                                           new Scalar(0,0,200,255)};
+        org.opencv.core.Point mP1 = new org.opencv.core.Point();
+        org.opencv.core.Point mP2 = new org.opencv.core.Point();
+
+        int thickness = (int)(image.width() / (mHistSizeNum+10)/3);
+        if(thickness > 3) thickness = 3;
+        MatOfInt mChannels[] = new MatOfInt[]{new MatOfInt(0), new MatOfInt(1), new MatOfInt(2)};
+
+        Size sizeRgba = image.size();
+        int offset = (int)((sizeRgba.width - (3*mHistSizeNum+30) * thickness));
+        // RGB
+        for(int c = 0; c < 3; c++){
+            Imgproc.calcHist(Arrays.asList(image), mChannels[c], new Mat(), hist, mHistSize, histogramRanges);
+            Core.normalize(hist, hist, sizeRgba.height/2, 0, Core.NORM_INF);
+            hist.get(0,0,mBuff);
+            for(int h = 0; h < mHistSizeNum; h++){
+                mP1.x = mP2.x = offset + (c * (mHistSizeNum + 10) + h) * thickness;
+                mP1.y = sizeRgba.height-1;
+                mP2.y = mP1.y - (int)mBuff[h];
+                Imgproc.line(image, mP1, mP2, mColorSRGB[c], thickness);
+            }
+        }
+
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this){
