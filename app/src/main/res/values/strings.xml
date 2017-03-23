@@ -7,4 +7,12 @@
     <string name="action_ctgs">Gray Scale</string>
     <string name="action_eqgsistring">Histogram Equalization</string>
     <string name="action_enhanceHSV">HSV</string>
+    <string name="action_RGB">Enhance RGB</string>
+    <string name="action_enhanceRGB_small">ERGB</string>
+    <string name="action_enhance_red_small">ER</string>
+    <string name="action_enhance_red">Enhance Red</string>
+    <string name="action_enhance_green_small">EG</string>
+    <string name="action_enhance_green">Enhance Green</string>
+    <string name="action_enhance_red_green_small">ERG</string>
+    <string name="action_enhance_red_green">Enhance Red|Green</string>
 </resources>

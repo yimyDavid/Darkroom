@@ -190,9 +190,35 @@ public class IODarkRoom extends AppCompatActivity {
             Imgproc.cvtColor(HSV, enhancedImage, Imgproc.COLOR_HSV2RGB);
             displayImage(enhancedImage);
             return true;
+        }else if(id == R.id.action_ER){
+            if(sampledImage == null){
+                Context context = getApplicationContext();
+                CharSequence text = "You need to load an image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return true;
+            }
+
+            Mat redEnhanced = new Mat();
+            sampledImage.copyTo(redEnhanced);
+            Mat redMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,0,0,0));
+
+            enhanceChannel(redEnhanced, redMask);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void enhanceChannel(Mat imageToEnhance, Mat mask){
+        Mat channel = new Mat(sampledImage.rows(), sampledImage.cols(), CvType.CV_8UC1);
+        sampledImage.copyTo(channel, mask);
+
+        Imgproc.cvtColor(channel, channel, Imgproc.COLOR_RGB2GRAY, 1);
+        Imgproc.equalizeHist(channel, channel);
+        Imgproc.cvtColor(channel, channel, Imgproc.COLOR_GRAY2RGB, 3);
+        channel.copyTo(imageToEnhance);
     }
 
     private void calcHist(Mat image){
