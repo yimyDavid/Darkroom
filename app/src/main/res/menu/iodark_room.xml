@@ -26,4 +26,11 @@
                 android:title="@string/action_eqgsistring"/>
         </menu>
     </item>
+    <item
+        android:id="@+id/action_HSV"
+        android:titleCondensed="@string/action_enhanceHSV"
+        android:title="@string/action_enhanceHSV"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:visible="true"></item>
 </menu>

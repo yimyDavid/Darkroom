@@ -6,4 +6,5 @@
     <string name="enhance_gs_small">EGS</string>
     <string name="action_ctgs">Gray Scale</string>
     <string name="action_eqgsistring">Histogram Equalization</string>
+    <string name="action_enhanceHSV">HSV</string>
 </resources>

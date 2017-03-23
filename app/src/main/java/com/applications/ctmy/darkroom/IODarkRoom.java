@@ -27,6 +27,7 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import org.opencv.core.MatOfFloat;
@@ -53,7 +54,7 @@ public class IODarkRoom extends AppCompatActivity {
     private String selectedImagePath;
     Mat sampledImage;
     Mat originalImage;
-
+    Mat greyImage;
 
 //    static{
 //        System.loadLibrary("opencv_java3");
@@ -89,7 +90,7 @@ public class IODarkRoom extends AppCompatActivity {
         // automatically handle clicks on the Home/up button, so long
         // as you specify a parent activity in  AndroidManifest.xml.
         int id = item.getItemId();
-        Mat greyImage = new Mat();
+
         if(id == R.id.action_openGallery){
             Intent intent = new Intent();
             // I HAD THIS WRONG "imag/*
@@ -123,8 +124,7 @@ public class IODarkRoom extends AppCompatActivity {
                 toast.show();
                 return true;
             }
-
-
+            greyImage = new Mat();
             Imgproc.cvtColor(sampledImage, greyImage, Imgproc.COLOR_RGB2GRAY);
             displayImage(greyImage);
             return true;
@@ -142,6 +142,53 @@ public class IODarkRoom extends AppCompatActivity {
             Mat eqGS = new Mat();
             Imgproc.equalizeHist(greyImage, eqGS);
             displayImage(eqGS);
+            return true;
+        }else if(id == R.id.action_HSV){
+            if(sampledImage == null){
+                Context context = getApplicationContext();
+                CharSequence text = "You need to load an image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text,duration);
+                toast.show();
+                return true;
+            }
+
+            Mat V = new Mat(sampledImage.rows(), sampledImage.cols(), CvType.CV_8UC1);
+            Mat S = new Mat(sampledImage.rows(), sampledImage.cols(), CvType.CV_8UC1);
+
+            Mat HSV = new Mat();
+            Imgproc.cvtColor(sampledImage, HSV, Imgproc.COLOR_RGB2HSV);
+
+            byte [] Vs = new byte[3];
+            byte [] vsout = new byte[1];
+            byte [] ssout = new byte[1];
+
+            for(int i = 0; i < HSV.rows(); i++){
+                for(int j = 0; j < HSV.cols(); j++){
+                    HSV.get(i, j, Vs);
+                    V.put(i,j,new byte[]{Vs[2]});
+                    S.put(i,j,new byte[]{Vs[1]});
+                }
+            }
+
+            Imgproc.equalizeHist(V, V);
+            Imgproc.equalizeHist(S, S);
+
+            for(int i = 0; i < HSV.rows(); i++){
+                for(int j = 0; j < HSV.cols(); j++){
+                    V.get(i, j, vsout);
+                    S.get(i, j, ssout);
+                    HSV.get(i, j, Vs);
+                    Vs[2] = vsout[0];
+                    Vs[1] = ssout[0];
+                    HSV.put(i, j, Vs);
+                }
+            }
+
+            Mat enhancedImage = new Mat();
+            Imgproc.cvtColor(HSV, enhancedImage, Imgproc.COLOR_HSV2RGB);
+            displayImage(enhancedImage);
             return true;
         }
 
