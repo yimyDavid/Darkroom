@@ -89,6 +89,7 @@ public class IODarkRoom extends AppCompatActivity {
         // automatically handle clicks on the Home/up button, so long
         // as you specify a parent activity in  AndroidManifest.xml.
         int id = item.getItemId();
+        Mat greyImage = new Mat();
         if(id == R.id.action_openGallery){
             Intent intent = new Intent();
             // I HAD THIS WRONG "imag/*
@@ -123,9 +124,24 @@ public class IODarkRoom extends AppCompatActivity {
                 return true;
             }
 
-            Mat greyImage = new Mat();
+
             Imgproc.cvtColor(sampledImage, greyImage, Imgproc.COLOR_RGB2GRAY);
             displayImage(greyImage);
+            return true;
+        }else if(id == R.id.action_egs){
+            if(greyImage == null){
+                Context context = getApplicationContext();
+                CharSequence text = "You need to convert the image to greysacle first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return true;
+            }
+
+            Mat eqGS = new Mat();
+            Imgproc.equalizeHist(greyImage, eqGS);
+            displayImage(eqGS);
             return true;
         }
 
