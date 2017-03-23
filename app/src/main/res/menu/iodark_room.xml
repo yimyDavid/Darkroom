@@ -10,4 +10,20 @@
         android:orderInCategory="101"
         app:showAsAction="never"
         android:title="@string/action_Hist"></item>
+    <item
+        android:id="@+id/enhance_gs"
+        android:title="@string/enhance_gs"
+        android:enabled="true"
+        android:visible="true"
+        app:showAsAction="always"
+        android:titleCondensed="@string/enhance_gs_small">
+        <menu>
+            <item
+                android:id="@+id/action_togs"
+                android:title="@string/action_ctgs"/>
+            <item
+                android:id="@+id/action_egs"
+                android:title="@string/action_eqgsistring"/>
+        </menu>
+    </item>
 </menu>

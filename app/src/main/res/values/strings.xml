@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Darkroom</string>
     <string name="action_OpenGallery">Open Gallery</string>
-    <string name="action_Hist">History</string>
+    <string name="action_Hist">Histogram</string>
+    <string name="enhance_gs">Enhance GS</string>
+    <string name="enhance_gs_small">EGS</string>
+    <string name="action_ctgs">Gray Scale</string>
+    <string name="action_eqgsistring">HistEq</string>
 </resources>

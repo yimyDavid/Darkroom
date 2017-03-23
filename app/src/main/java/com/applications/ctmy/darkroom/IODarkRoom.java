@@ -112,6 +112,21 @@ public class IODarkRoom extends AppCompatActivity {
             calcHist(histImage);
             displayImage(histImage);
             return true;
+        }else if(id == R.id.action_togs){
+            if(sampledImage == null){
+                Context context = getApplicationContext();
+                CharSequence text = "You need to load an image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return true;
+            }
+
+            Mat greyImage = new Mat();
+            Imgproc.cvtColor(sampledImage, greyImage, Imgproc.COLOR_RGB2GRAY);
+            displayImage(greyImage);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
