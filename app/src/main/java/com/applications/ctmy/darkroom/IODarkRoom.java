@@ -101,12 +101,7 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_Hist){
             if(sampledImage == null){
-               /* Context context = getApplicationContext();
-                CharSequence text = "You need to load an image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -117,12 +112,7 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_togs){
             if(sampledImage == null){
-               /* Context context = getApplicationContext();
-                CharSequence text = "You need to load an image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -132,12 +122,7 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_egs){
             if(greyImage == null){
-                /*Context context = getApplicationContext();
-                CharSequence text = "You need to convert the image to greysacle first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -148,12 +133,7 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_HSV){
             if(sampledImage == null){
-                /*Context context = getApplicationContext();
-                CharSequence text = "You need to load an image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text,duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -195,16 +175,8 @@ public class IODarkRoom extends AppCompatActivity {
             displayImage(enhancedImage);
             return true;
         }else if(id == R.id.action_ER){
-            //Context c = getApplication();
-            //Toast t = Toast.makeText(c, "adentro ER", Toast.LENGTH_SHORT);
-            //t.show();
             if(sampledImage == null){
-               /* Context context = getApplicationContext();
-                CharSequence text = "You need to load an image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -217,12 +189,7 @@ public class IODarkRoom extends AppCompatActivity {
             displayImage(redEnhanced);
         }else if(id == R.id.action_EG){
             if(sampledImage == null){
-                /*Context context = getApplicationContext();
-                CharSequence text = "You need to load and image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -235,12 +202,7 @@ public class IODarkRoom extends AppCompatActivity {
             displayImage(greenEnhanced);
         }else if(id == R.id.action_EB){
             if(sampledImage == null){
-                /*Context context = getApplicationContext();
-                CharSequence text = "You need to load and image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();*/
                 noImageMessage(getApplicationContext());
                 return true;
             }
@@ -252,15 +214,7 @@ public class IODarkRoom extends AppCompatActivity {
             enhanceChannel(blueEnhanced, blueMask);
             displayImage(blueEnhanced);
         }else if(id == R.id.action_ERG){
-           /* if(sampledImage == null){
-                Context context = getApplicationContext();
-                CharSequence text = "You need to load and image first!";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                return true;
-            }*/
            if(sampledImage == null) {
                noImageMessage(getApplicationContext());
                return true;
