@@ -60,6 +60,14 @@
                 android:title="@string/action_enhance_green"
                 android:orderInCategory="2"/>
             <item
+                android:id="@+id/action_EB"
+                app:showAsAction="ifRoom"
+                android:visible="true"
+                android:enabled="true"
+                android:title="@string/action_enhance_blue"
+                android:titleCondensed="@string/action_enhance_blue_small"
+                android:orderInCategory="3"/>
+            <item
                 android:id="@+id/action_ERG"
                 app:showAsAction="ifRoom"
                 android:visible="true"

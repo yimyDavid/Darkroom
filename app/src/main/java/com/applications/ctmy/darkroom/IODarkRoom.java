@@ -101,12 +101,13 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_Hist){
             if(sampledImage == null){
-                Context context = getApplicationContext();
+               /* Context context = getApplicationContext();
                 CharSequence text = "You need to load an image first!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                toast.show();*/
+                noImageMessage(getApplicationContext());
                 return true;
             }
             Mat histImage = new Mat();
@@ -116,12 +117,13 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_togs){
             if(sampledImage == null){
-                Context context = getApplicationContext();
+               /* Context context = getApplicationContext();
                 CharSequence text = "You need to load an image first!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                toast.show();*/
+                noImageMessage(getApplicationContext());
                 return true;
             }
             greyImage = new Mat();
@@ -130,12 +132,13 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_egs){
             if(greyImage == null){
-                Context context = getApplicationContext();
+                /*Context context = getApplicationContext();
                 CharSequence text = "You need to convert the image to greysacle first!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                toast.show();*/
+                noImageMessage(getApplicationContext());
                 return true;
             }
 
@@ -145,12 +148,13 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_HSV){
             if(sampledImage == null){
-                Context context = getApplicationContext();
+                /*Context context = getApplicationContext();
                 CharSequence text = "You need to load an image first!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text,duration);
-                toast.show();
+                toast.show();*/
+                noImageMessage(getApplicationContext());
                 return true;
             }
 
@@ -191,13 +195,17 @@ public class IODarkRoom extends AppCompatActivity {
             displayImage(enhancedImage);
             return true;
         }else if(id == R.id.action_ER){
+            //Context c = getApplication();
+            //Toast t = Toast.makeText(c, "adentro ER", Toast.LENGTH_SHORT);
+            //t.show();
             if(sampledImage == null){
-                Context context = getApplicationContext();
+               /* Context context = getApplicationContext();
                 CharSequence text = "You need to load an image first!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                toast.show();*/
+                noImageMessage(getApplicationContext());
                 return true;
             }
 
@@ -206,9 +214,67 @@ public class IODarkRoom extends AppCompatActivity {
             Mat redMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,0,0,0));
 
             enhanceChannel(redEnhanced, redMask);
+            displayImage(redEnhanced);
+        }else if(id == R.id.action_EG){
+            if(sampledImage == null){
+                /*Context context = getApplicationContext();
+                CharSequence text = "You need to load and image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();*/
+                noImageMessage(getApplicationContext());
+                return true;
+            }
+
+            Mat greenEnhanced = new Mat();
+            sampledImage.copyTo(greenEnhanced);
+            Mat greenMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,0,0));
+
+            enhanceChannel(greenEnhanced, greenMask);
+            displayImage(greenEnhanced);
+        }else if(id == R.id.action_EB){
+            if(sampledImage == null){
+                /*Context context = getApplicationContext();
+                CharSequence text = "You need to load and image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();*/
+                noImageMessage(getApplicationContext());
+                return true;
+            }
+
+            Mat blueEnhanced = new Mat();
+            sampledImage.copyTo(blueEnhanced);
+            Mat blueMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,0,1,0));
+
+            enhanceChannel(blueEnhanced, blueMask);
+            displayImage(blueEnhanced);
+        }else if(id == R.id.action_ERG){
+           /* if(sampledImage == null){
+                Context context = getApplicationContext();
+                CharSequence text = "You need to load and image first!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return true;
+            }*/
+           if(sampledImage == null) {
+               noImageMessage(getApplicationContext());
+               return true;
+           }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void noImageMessage(Context c){
+
+            Toast toast = Toast.makeText(c,"You need to load an image first!", Toast.LENGTH_SHORT);
+            toast.show();
+
     }
 
     private void enhanceChannel(Mat imageToEnhance, Mat mask){
@@ -218,7 +284,7 @@ public class IODarkRoom extends AppCompatActivity {
         Imgproc.cvtColor(channel, channel, Imgproc.COLOR_RGB2GRAY, 1);
         Imgproc.equalizeHist(channel, channel);
         Imgproc.cvtColor(channel, channel, Imgproc.COLOR_GRAY2RGB, 3);
-        channel.copyTo(imageToEnhance);
+        channel.copyTo(imageToEnhance, mask);
     }
 
     private void calcHist(Mat image){
