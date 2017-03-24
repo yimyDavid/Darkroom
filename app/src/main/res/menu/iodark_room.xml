@@ -75,6 +75,22 @@
                 android:titleCondensed="@string/action_enhance_red_green_small"
                 android:title="@string/action_enhance_red_green"
                 android:orderInCategory="3"/>
+            <item
+                android:id="@+id/action_EGB"
+                app:showAsAction="ifRoom"
+                android:visible="true"
+                android:enabled="true"
+                android:titleCondensed="@string/action_enhance_green_blue_small"
+                android:title="@string/action_enhance_green_blue"
+                android:orderInCategory="3"/>
+            <item
+                android:id="@+id/action_ERB"
+                app:showAsAction="ifRoom"
+                android:visible="true"
+                android:enabled="true"
+                android:titleCondensed="@string/action_enhance_red_blue_small"
+                android:title="@string/action_enhance_red_blue"
+                android:orderInCategory="3"/>
 
         </menu>
     </item>

@@ -219,6 +219,33 @@ public class IODarkRoom extends AppCompatActivity {
                noImageMessage(getApplicationContext());
                return true;
            }
+
+           Mat rgEnhanced = new Mat();
+            sampledImage.copyTo(rgEnhanced);
+            Mat rgMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,1,0,0));
+            enhanceChannel(rgEnhanced, rgMask);
+            displayImage(rgEnhanced);
+        }else if(id == R.id.action_EGB){
+            if(sampledImage == null){
+                noImageMessage(getApplicationContext());
+                return true;
+            }
+            Mat gbEnhanced = new Mat();
+            sampledImage.copyTo(gbEnhanced);
+            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
+            enhanceChannel(gbEnhanced, gbMask);
+            displayImage(gbEnhanced);
+        }else if(id == R.id.action_ERB){
+            if(sampledImage == null){
+                noImageMessage(getApplicationContext());
+                return true;
+            }
+
+            Mat rbEnhanced = new Mat();
+            sampledImage.copyTo(rbEnhanced);
+            Mat rbMask = new Mat(sampledImage.rows(),sampledImage.cols(), sampledImage.type(), new Scalar(1,0,1,0));
+            enhanceChannel(rbEnhanced, rbMask);
+            displayImage(rbEnhanced);
         }
 
         return super.onOptionsItemSelected(item);

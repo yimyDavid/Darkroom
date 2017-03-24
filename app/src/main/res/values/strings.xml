@@ -15,6 +15,10 @@
     <string name="action_enhance_green">Enhance Green</string>
     <string name="action_enhance_red_green_small">ERG</string>
     <string name="action_enhance_red_green">Enhance Red|Green</string>
+    <string name="action_enhance_green_blue">Enhance Green|Blue</string>
+    <string name="action_enhance_green_blue_small">EGB</string>
+    <string name="action_enhance_red_blue">Enhance Red|Blue</string>
+    <string name="action_enhance_red_blue_small">ERB</string>
     <string name="action_enhance_blue">Enhance Blue</string>
     <string name="action_enhance_blue_small">EB</string>
 </resources>
