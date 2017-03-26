@@ -37,6 +37,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -232,7 +233,7 @@ public class IODarkRoom extends AppCompatActivity {
             }
             Mat gbEnhanced = new Mat();
             sampledImage.copyTo(gbEnhanced);
-            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
+            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,0.5,0.5,0));
             enhanceChannel(gbEnhanced, gbMask);
             displayImage(gbEnhanced);
         }else if(id == R.id.action_ERB){

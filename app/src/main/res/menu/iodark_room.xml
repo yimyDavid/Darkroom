@@ -31,7 +31,7 @@
         android:titleCondensed="@string/action_enhanceHSV"
         android:title="@string/action_enhanceHSV"
         android:enabled="true"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:visible="true"></item>
     <item
         android:id="@+id/action_RGB"
