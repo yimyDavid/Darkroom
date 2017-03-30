@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.icu.util.MeasureUnit;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.graphics.Point;
@@ -52,9 +50,12 @@ public class IODarkRoom extends AppCompatActivity {
 
     // Variables to handle user clicks on the menu
     private static final int SELECT_PICTURE = 1;
+    private static final int THUMBNAIL = 1;
+    private static final int NORMAL_SIZE = 2;
     private String selectedImagePath;
     Mat sampledImage;
     Mat originalImage;
+    Mat imageThumbnail;
     Mat greyImage;
 
 //    static{
@@ -233,7 +234,7 @@ public class IODarkRoom extends AppCompatActivity {
             }
             Mat gbEnhanced = new Mat();
             sampledImage.copyTo(gbEnhanced);
-            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,0.5,0.5,0));
+            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
             enhanceChannel(gbEnhanced, gbMask);
             displayImage(gbEnhanced);
         }else if(id == R.id.action_ERB){
@@ -329,8 +330,19 @@ public class IODarkRoom extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
                 Log.i(TAG, "selectedImagePath: " + selectedImagePath);
-                loadImage(selectedImagePath);
+
+
+
+                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+                imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
+
+                transformImage(sampledImage);
+                transformImage(imageThumbnail);
                 displayImage(sampledImage);
+                displayImage(imageThumbnail);
+
+                //displayImageThumb(imageThumbnail);
+                //displayImageThumb(gbEnhanced);
             }
         }
 
@@ -356,11 +368,68 @@ public class IODarkRoom extends AppCompatActivity {
         return uri.getPath();
     }
 
-    private void loadImage(String path){
+
+    private Mat loadImage(String path, Mat img, int type){
         originalImage = Imgcodecs.imread(path);
         Mat rgbImage = new Mat();
 
         Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
+
+
+        Mat resizedTemp = resize(rgbImage, img, type);
+        //Display display = getWindowManager().getDefaultDisplay();
+
+        // This is "android graphics Point" class
+        //Point size = new Point();
+        //display.getSize(size);
+
+        //int width = (int) size.x;
+        //int height = (int) size.y;
+        //sampledImage = new Mat();
+        //Mat imageRef;
+
+        //double downSampleRatio = calculateSubSampleSize(rgbImage, width, height);
+
+        // Calculate the appropriate ratio to resize the images
+        //if(type == THUMBNAIL) {
+        //    imageThumbnail = new Mat();
+        //    imageRef = imageThumbnail;
+        //    downSampleRatio /= 4;
+        //}else{
+        //    sampledImage = new Mat();
+        //    imageRef = sampledImage;
+        //}
+
+        //Imgproc.resize(rgbImage, imageRef, new Size(), downSampleRatio, downSampleRatio,
+        //        Imgproc.INTER_AREA);
+
+        // Transforms the image orientation regardless the orientation it was taken at.
+       /* try{
+            ExifInterface exif = new ExifInterface(selectedImagePath);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+
+            switch (orientation)
+            {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    //get the mirrored image
+                    imageRef = imageRef.t();
+                    //flip on the y-axis
+                    Core.flip(imageRef, imageRef, 1);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    //get up side down image
+                    imageRef=imageRef.t();
+                    //Flip on the x-axis
+                    Core.flip(imageRef, imageRef, 0);
+                    break;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }*/
+       return resizedTemp;
+    }
+
+    private Mat resize(Mat original, Mat resized, int sizeTo){
 
         Display display = getWindowManager().getDefaultDisplay();
 
@@ -370,13 +439,22 @@ public class IODarkRoom extends AppCompatActivity {
 
         int width = (int) size.x;
         int height = (int) size.y;
-        sampledImage = new Mat();
 
-        double downSampleRatio = calculateSubSampleSize(rgbImage, width, height);
+        double downSampleRatio = calculateSubSampleSize(original, width, height);
 
-        Imgproc.resize(rgbImage, sampledImage, new Size(), downSampleRatio, downSampleRatio,
+        if(sizeTo == THUMBNAIL)
+            downSampleRatio /= 4;
+
+
+        Mat temp = resized;
+        temp = new Mat();
+        Imgproc.resize(original, temp, new Size(), downSampleRatio, downSampleRatio,
                 Imgproc.INTER_AREA);
 
+        return temp;
+    }
+
+    private void transformImage(Mat img){
         try{
             ExifInterface exif = new ExifInterface(selectedImagePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
@@ -385,20 +463,21 @@ public class IODarkRoom extends AppCompatActivity {
             {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     //get the mirrored image
-                    sampledImage = sampledImage.t();
+                    img = img.t();
                     //flip on the y-axis
-                    Core.flip(sampledImage, sampledImage, 1);
+                    Core.flip(img, img, 1);
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     //get up side down image
-                    sampledImage=sampledImage.t();
+                    img=img.t();
                     //Flip on the x-axis
-                    Core.flip(sampledImage, sampledImage, 0);
+                    Core.flip(img, img, 0);
                     break;
             }
         }catch (IOException e){
             e.printStackTrace();
         }
+
     }
 
     private void displayImage(Mat image){
@@ -410,6 +489,18 @@ public class IODarkRoom extends AppCompatActivity {
 
         // find the imageview and draw it!
         ImageView iv = (ImageView) findViewById(R.id.IODarkRoomImageView);
+        iv.setImageBitmap(bitmap);
+    }
+
+    private void displayImageThumb(Mat image){
+        // create a bitMap
+        Bitmap bitmap = Bitmap.createBitmap(image.cols(), image.rows(), Bitmap.Config.RGB_565);
+
+        //Convert to bitmap
+        Utils.matToBitmap(image, bitmap);
+
+        // find the imageview and draw it!
+        ImageView iv = (ImageView) findViewById(R.id.ef_one);
         iv.setImageBitmap(bitmap);
     }
 
