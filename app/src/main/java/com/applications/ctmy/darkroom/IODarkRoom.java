@@ -336,8 +336,8 @@ public class IODarkRoom extends AppCompatActivity {
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
 
-                transformImage(sampledImage);
-                transformImage(imageThumbnail);
+                sampledImage = transformImage(sampledImage);
+                imageThumbnail = transformImage(imageThumbnail);
                 displayImage(sampledImage);
                 displayImage(imageThumbnail);
 
@@ -454,7 +454,8 @@ public class IODarkRoom extends AppCompatActivity {
         return temp;
     }
 
-    private void transformImage(Mat img){
+    private Mat transformImage(Mat img){
+        Mat temp = img;
         try{
             ExifInterface exif = new ExifInterface(selectedImagePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
@@ -463,20 +464,22 @@ public class IODarkRoom extends AppCompatActivity {
             {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     //get the mirrored image
-                    img = img.t();
+                    temp = temp.t();
                     //flip on the y-axis
-                    Core.flip(img, img, 1);
+                    Core.flip(temp, temp, 1);
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     //get up side down image
-                    img=img.t();
+                    temp=temp.t();
                     //Flip on the x-axis
-                    Core.flip(img, img, 0);
+                    Core.flip(temp, temp, 0);
                     break;
             }
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        return temp;
 
     }
 
