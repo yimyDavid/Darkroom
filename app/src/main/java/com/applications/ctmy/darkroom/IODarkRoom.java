@@ -333,13 +333,14 @@ public class IODarkRoom extends AppCompatActivity {
 
 
 
-                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
-                imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
+                //sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+                //imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
 
-                sampledImage = transformImage(sampledImage);
-                imageThumbnail = transformImage(imageThumbnail);
+                ///sampledImage = transformImage(sampledImage);
+                //imageThumbnail = transformImage(imageThumbnail);
+                loadImage(selectedImagePath);
                 displayImage(sampledImage);
-                displayImage(imageThumbnail);
+                //displayImage(imageThumbnail);
 
                 //displayImageThumb(imageThumbnail);
                 //displayImageThumb(gbEnhanced);
@@ -369,64 +370,44 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
 
-    private Mat loadImage(String path, Mat img, int type){
+    private void loadImage(String path){
+
         originalImage = Imgcodecs.imread(path);
         Mat rgbImage = new Mat();
 
         Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
 
-        Mat resizedTemp = resize(rgbImage, img, type);
-        //Display display = getWindowManager().getDefaultDisplay();
+        int width = size.x;
+        int height = size.y;
+        sampledImage = new Mat();
 
-        // This is "android graphics Point" class
-        //Point size = new Point();
-        //display.getSize(size);
+        double downSampleRation = calculateSubSampleSize(rgbImage, width, height);
 
-        //int width = (int) size.x;
-        //int height = (int) size.y;
-        //sampledImage = new Mat();
-        //Mat imageRef;
+        Imgproc.resize(rgbImage, sampledImage, new Size(), downSampleRation, downSampleRation, Imgproc.INTER_AREA);
 
-        //double downSampleRatio = calculateSubSampleSize(rgbImage, width, height);
-
-        // Calculate the appropriate ratio to resize the images
-        //if(type == THUMBNAIL) {
-        //    imageThumbnail = new Mat();
-        //    imageRef = imageThumbnail;
-        //    downSampleRatio /= 4;
-        //}else{
-        //    sampledImage = new Mat();
-        //    imageRef = sampledImage;
-        //}
-
-        //Imgproc.resize(rgbImage, imageRef, new Size(), downSampleRatio, downSampleRatio,
-        //        Imgproc.INTER_AREA);
-
-        // Transforms the image orientation regardless the orientation it was taken at.
-       /* try{
+        /*try{
             ExifInterface exif = new ExifInterface(selectedImagePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
 
             switch (orientation)
             {
                 case ExifInterface.ORIENTATION_ROTATE_90:
-                    //get the mirrored image
-                    imageRef = imageRef.t();
-                    //flip on the y-axis
-                    Core.flip(imageRef, imageRef, 1);
+                    sampledImage = sampledImage.t();
+                    Core.flip(sampledImage, sampledImage, 1);
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
-                    //get up side down image
-                    imageRef=imageRef.t();
-                    //Flip on the x-axis
-                    Core.flip(imageRef, imageRef, 0);
+                    sampledImage = sampledImage.t();
+                    Core.flip(sampledImage, sampledImage, 0);
                     break;
+
             }
         }catch (IOException e){
             e.printStackTrace();
         }*/
-       return resizedTemp;
     }
 
     private Mat resize(Mat original, Mat resized, int sizeTo){
