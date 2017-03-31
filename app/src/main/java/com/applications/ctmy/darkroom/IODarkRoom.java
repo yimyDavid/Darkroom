@@ -333,12 +333,12 @@ public class IODarkRoom extends AppCompatActivity {
 
 
 
-                //sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
-                //imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
+                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+                imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
 
-                ///sampledImage = transformImage(sampledImage);
-                //imageThumbnail = transformImage(imageThumbnail);
-                loadImage(selectedImagePath);
+                sampledImage = transformImage(sampledImage);
+                imageThumbnail = transformImage(imageThumbnail);
+                //loadImage(selectedImagePath);
                 displayImage(sampledImage);
                 //displayImage(imageThumbnail);
 
@@ -370,25 +370,14 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
 
-    private void loadImage(String path){
+    private Mat loadImage(String path, Mat img, int type){
 
         originalImage = Imgcodecs.imread(path);
         Mat rgbImage = new Mat();
 
         Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        int width = size.x;
-        int height = size.y;
-        sampledImage = new Mat();
-
-        double downSampleRation = calculateSubSampleSize(rgbImage, width, height);
-
-        Imgproc.resize(rgbImage, sampledImage, new Size(), downSampleRation, downSampleRation, Imgproc.INTER_AREA);
-
+       Mat resizedTemp = resize(rgbImage, img, type);
         /*try{
             ExifInterface exif = new ExifInterface(selectedImagePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
@@ -408,6 +397,8 @@ public class IODarkRoom extends AppCompatActivity {
         }catch (IOException e){
             e.printStackTrace();
         }*/
+
+        return resizedTemp;
     }
 
     private Mat resize(Mat original, Mat resized, int sizeTo){
