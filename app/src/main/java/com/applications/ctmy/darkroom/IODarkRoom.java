@@ -51,6 +51,7 @@ public class IODarkRoom extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private static final int THUMBNAIL = 1;
     private static final int NORMAL_SIZE = 2;
+    private final int NUMBER_OF_EFFECTS = 2; //8
     private String selectedImagePath;
     Mat sampledImage;
     Mat originalImage;
@@ -196,7 +197,7 @@ public class IODarkRoom extends AppCompatActivity {
             sampledImage.copyTo(redEnhanced);
             Mat redMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,0,0,0));
 
-            enhanceChannel(redEnhanced, redMask);
+            enhanceChannel(redEnhanced, redMask, sampledImage);
             displayImage(redEnhanced, idMainImageView);
         }else if(id == R.id.action_EG){
             if(sampledImage == null){
@@ -209,7 +210,7 @@ public class IODarkRoom extends AppCompatActivity {
             sampledImage.copyTo(greenEnhanced);
             Mat greenMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,0,0));
 
-            enhanceChannel(greenEnhanced, greenMask);
+            enhanceChannel(greenEnhanced, greenMask, sampledImage);
             displayImage(greenEnhanced, idMainImageView);
         }else if(id == R.id.action_EB){
             if(sampledImage == null){
@@ -222,7 +223,7 @@ public class IODarkRoom extends AppCompatActivity {
             sampledImage.copyTo(blueEnhanced);
             Mat blueMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,0,1,0));
 
-            enhanceChannel(blueEnhanced, blueMask);
+            enhanceChannel(blueEnhanced, blueMask, sampledImage);
             displayImage(blueEnhanced, idMainImageView);
         }else if(id == R.id.action_ERG){
 
@@ -234,7 +235,7 @@ public class IODarkRoom extends AppCompatActivity {
            Mat rgEnhanced = new Mat();
             sampledImage.copyTo(rgEnhanced);
             Mat rgMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,1,0,0));
-            enhanceChannel(rgEnhanced, rgMask);
+            enhanceChannel(rgEnhanced, rgMask, sampledImage);
 
             displayImage(rgEnhanced, idMainImageView);
         }else if(id == R.id.action_EGB){
@@ -245,7 +246,7 @@ public class IODarkRoom extends AppCompatActivity {
             Mat gbEnhanced = new Mat();
             sampledImage.copyTo(gbEnhanced);
             Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
-            enhanceChannel(gbEnhanced, gbMask);
+            enhanceChannel(gbEnhanced, gbMask, sampledImage);
             displayImage(gbEnhanced, idMainImageView);
         }else if(id == R.id.action_ERB){
             if(sampledImage == null){
@@ -256,7 +257,7 @@ public class IODarkRoom extends AppCompatActivity {
             Mat rbEnhanced = new Mat();
             sampledImage.copyTo(rbEnhanced);
             Mat rbMask = new Mat(sampledImage.rows(),sampledImage.cols(), sampledImage.type(), new Scalar(1,0,1,0));
-            enhanceChannel(rbEnhanced, rbMask);
+            enhanceChannel(rbEnhanced, rbMask, sampledImage);
             displayImage(rbEnhanced, idMainImageView);
         }
 
@@ -270,9 +271,10 @@ public class IODarkRoom extends AppCompatActivity {
 
     }
 
-    private void enhanceChannel(Mat imageToEnhance, Mat mask){
-        Mat channel = new Mat(sampledImage.rows(), sampledImage.cols(), CvType.CV_8UC1);
-        sampledImage.copyTo(channel, mask);
+    private void enhanceChannel(Mat imageToEnhance, Mat mask, Mat originalImage){
+        //Mat channel = new Mat(sampledImage.rows(), sampledImage.cols(), CvType.CV_8UC1);
+        Mat channel = new Mat(originalImage.rows(), originalImage.cols(), CvType.CV_8UC1);
+        originalImage.copyTo(channel, mask);
 
         Imgproc.cvtColor(channel, channel, Imgproc.COLOR_RGB2GRAY, 1);
         Imgproc.equalizeHist(channel, channel);
@@ -352,7 +354,13 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(sampledImage, idMainImageView);
                 ImageView thumbnail = (ImageView) findViewById(R.id.ef_one);
                 int idThumbnail = thumbnail.getId();
-                displayImage(imageThumbnail, idThumbnail);
+
+                Mat gbEnhanced = new Mat();
+                imageThumbnail.copyTo(gbEnhanced);
+                Mat gbMask = new Mat(imageThumbnail.rows(), imageThumbnail.cols(), imageThumbnail.type(), new Scalar(0,1,1,0));
+                enhanceChannel(gbEnhanced, gbMask, imageThumbnail);
+
+                displayImage(gbEnhanced, idThumbnail);
 
                 //displayImageThumb(imageThumbnail);
                 //displayImageThumb(gbEnhanced);
@@ -480,16 +488,15 @@ public class IODarkRoom extends AppCompatActivity {
         iv.setImageBitmap(bitmap);
     }
 
-    private void displayImageThumb(Mat image){
-        // create a bitMap
-        Bitmap bitmap = Bitmap.createBitmap(image.cols(), image.rows(), Bitmap.Config.RGB_565);
 
-        //Convert to bitmap
-        Utils.matToBitmap(image, bitmap);
-
-        // find the imageview and draw it!
-        ImageView iv = (ImageView) findViewById(R.id.ef_one);
-        iv.setImageBitmap(bitmap);
+    private void displayThumbnailPreviews(int effectsQuantity, Mat image, int id){
+        for(int i = 0; i < effectsQuantity; i++){
+            Mat gbEnhanced = new Mat();
+            sampledImage.copyTo(gbEnhanced);
+            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
+            enhanceChannel(gbEnhanced, gbMask, image);
+            displayImage(image, id);
+        }
     }
 
     private static double calculateSubSampleSize(Mat srcImage, int reqWidth, int reqHeight){
