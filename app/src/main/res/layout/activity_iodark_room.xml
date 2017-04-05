@@ -32,7 +32,7 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                android:background="@android:color/darker_gray"
+                android:background="@android:color/background_dark"
                 android:scaleType="center" />
 
             <ImageView

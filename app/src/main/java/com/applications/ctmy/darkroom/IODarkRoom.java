@@ -1,6 +1,5 @@
 package com.applications.ctmy.darkroom;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -35,9 +34,9 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgcodecs.Imgcodecs;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+
 
 public class IODarkRoom extends AppCompatActivity {
 
@@ -58,6 +57,10 @@ public class IODarkRoom extends AppCompatActivity {
     Mat imageThumbnail;
     Mat greyImage;
 
+    ImageView v;
+    int idMainImageView;
+
+
 //    static{
 //        System.loadLibrary("opencv_java3");
 //
@@ -75,6 +78,9 @@ public class IODarkRoom extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iodark_room);
+
+
+
     }
 
 
@@ -88,6 +94,9 @@ public class IODarkRoom extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+
+        v = (ImageView) findViewById(R.id.IODarkRoomImageView);
+        idMainImageView = v.getId();
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/up button, so long
         // as you specify a parent activity in  AndroidManifest.xml.
@@ -110,7 +119,7 @@ public class IODarkRoom extends AppCompatActivity {
             Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
-            displayImage(histImage);
+            displayImage(histImage, idMainImageView);
             return true;
         }else if(id == R.id.action_togs){
             if(sampledImage == null){
@@ -120,7 +129,7 @@ public class IODarkRoom extends AppCompatActivity {
             }
             greyImage = new Mat();
             Imgproc.cvtColor(sampledImage, greyImage, Imgproc.COLOR_RGB2GRAY);
-            displayImage(greyImage);
+            displayImage(greyImage, idMainImageView);
             return true;
         }else if(id == R.id.action_egs){
             if(greyImage == null){
@@ -131,7 +140,7 @@ public class IODarkRoom extends AppCompatActivity {
 
             Mat eqGS = new Mat();
             Imgproc.equalizeHist(greyImage, eqGS);
-            displayImage(eqGS);
+            displayImage(eqGS, idMainImageView);
             return true;
         }else if(id == R.id.action_HSV){
             if(sampledImage == null){
@@ -174,7 +183,7 @@ public class IODarkRoom extends AppCompatActivity {
 
             Mat enhancedImage = new Mat();
             Imgproc.cvtColor(HSV, enhancedImage, Imgproc.COLOR_HSV2RGB);
-            displayImage(enhancedImage);
+            displayImage(enhancedImage, idMainImageView);
             return true;
         }else if(id == R.id.action_ER){
             if(sampledImage == null){
@@ -188,7 +197,7 @@ public class IODarkRoom extends AppCompatActivity {
             Mat redMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,0,0,0));
 
             enhanceChannel(redEnhanced, redMask);
-            displayImage(redEnhanced);
+            displayImage(redEnhanced, idMainImageView);
         }else if(id == R.id.action_EG){
             if(sampledImage == null){
 
@@ -201,7 +210,7 @@ public class IODarkRoom extends AppCompatActivity {
             Mat greenMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,0,0));
 
             enhanceChannel(greenEnhanced, greenMask);
-            displayImage(greenEnhanced);
+            displayImage(greenEnhanced, idMainImageView);
         }else if(id == R.id.action_EB){
             if(sampledImage == null){
 
@@ -214,7 +223,7 @@ public class IODarkRoom extends AppCompatActivity {
             Mat blueMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,0,1,0));
 
             enhanceChannel(blueEnhanced, blueMask);
-            displayImage(blueEnhanced);
+            displayImage(blueEnhanced, idMainImageView);
         }else if(id == R.id.action_ERG){
 
            if(sampledImage == null) {
@@ -226,7 +235,8 @@ public class IODarkRoom extends AppCompatActivity {
             sampledImage.copyTo(rgEnhanced);
             Mat rgMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,1,0,0));
             enhanceChannel(rgEnhanced, rgMask);
-            displayImage(rgEnhanced);
+
+            displayImage(rgEnhanced, idMainImageView);
         }else if(id == R.id.action_EGB){
             if(sampledImage == null){
                 noImageMessage(getApplicationContext());
@@ -236,7 +246,7 @@ public class IODarkRoom extends AppCompatActivity {
             sampledImage.copyTo(gbEnhanced);
             Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
             enhanceChannel(gbEnhanced, gbMask);
-            displayImage(gbEnhanced);
+            displayImage(gbEnhanced, idMainImageView);
         }else if(id == R.id.action_ERB){
             if(sampledImage == null){
                 noImageMessage(getApplicationContext());
@@ -247,7 +257,7 @@ public class IODarkRoom extends AppCompatActivity {
             sampledImage.copyTo(rbEnhanced);
             Mat rbMask = new Mat(sampledImage.rows(),sampledImage.cols(), sampledImage.type(), new Scalar(1,0,1,0));
             enhanceChannel(rbEnhanced, rbMask);
-            displayImage(rbEnhanced);
+            displayImage(rbEnhanced, idMainImageView);
         }
 
         return super.onOptionsItemSelected(item);
@@ -339,8 +349,10 @@ public class IODarkRoom extends AppCompatActivity {
                 sampledImage = transformImage(sampledImage);
                 imageThumbnail = transformImage(imageThumbnail);
                 //loadImage(selectedImagePath);
-                displayImage(sampledImage);
-                //displayImage(imageThumbnail);
+                displayImage(sampledImage, idMainImageView);
+                ImageView thumbnail = (ImageView) findViewById(R.id.ef_one);
+                int idThumbnail = thumbnail.getId();
+                displayImage(imageThumbnail, idThumbnail);
 
                 //displayImageThumb(imageThumbnail);
                 //displayImageThumb(gbEnhanced);
@@ -455,7 +467,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     }
 
-    private void displayImage(Mat image){
+    private void displayImage(Mat image, int id){
         // create a bitMap
         Bitmap bitmap = Bitmap.createBitmap(image.cols(), image.rows(), Bitmap.Config.RGB_565);
 
@@ -463,7 +475,8 @@ public class IODarkRoom extends AppCompatActivity {
         Utils.matToBitmap(image, bitmap);
 
         // find the imageview and draw it!
-        ImageView iv = (ImageView) findViewById(R.id.IODarkRoomImageView);
+        ImageView iv = (ImageView) findViewById(id);
+        //v = (ImageView) findViewById(R.id.ef_one);
         iv.setImageBitmap(bitmap);
     }
 
