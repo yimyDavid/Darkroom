@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
@@ -46,6 +47,10 @@ public class IODarkRoom extends AppCompatActivity {
     // A class used to implement the iteraction between OpenCV and the
     // device camera
     private CameraBridgeViewBase mOpenCvCameraView;
+
+    // Variables for identifying effects
+    private final int RED_BLUE = 5;
+    private final int GREEN_BLUE = 4;
 
     // Variables to handle user clicks on the menu
     private static final int SELECT_PICTURE = 1;
@@ -355,15 +360,14 @@ public class IODarkRoom extends AppCompatActivity {
                 ImageView thumbnail = (ImageView) findViewById(R.id.ef_one);
                 int idThumbnail = thumbnail.getId();
 
-                Mat gbEnhanced = new Mat();
-                imageThumbnail.copyTo(gbEnhanced);
-                Mat gbMask = new Mat(imageThumbnail.rows(), imageThumbnail.cols(), imageThumbnail.type(), new Scalar(0,1,1,0));
-                enhanceChannel(gbEnhanced, gbMask, imageThumbnail);
+                ImageView ef2 = (ImageView) findViewById(R.id.ef_two);
+                int efid = ef2.getId();
+                imageThumbnail = addEffect(imageThumbnail, RED_BLUE);
+                displayImage(imageThumbnail, efid);
 
-                displayImage(gbEnhanced, idThumbnail);
-
-                //displayImageThumb(imageThumbnail);
-                //displayImageThumb(gbEnhanced);
+                imageThumbnail = addEffect(imageThumbnail, GREEN_BLUE);
+                displayImage(imageThumbnail, idThumbnail);
+                
             }
         }
 
@@ -489,16 +493,6 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
 
-    private void displayThumbnailPreviews(int effectsQuantity, Mat image, int id){
-        for(int i = 0; i < effectsQuantity; i++){
-            Mat gbEnhanced = new Mat();
-            sampledImage.copyTo(gbEnhanced);
-            Mat gbMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(0,1,1,0));
-            enhanceChannel(gbEnhanced, gbMask, image);
-            displayImage(image, id);
-        }
-    }
-
     private static double calculateSubSampleSize(Mat srcImage, int reqWidth, int reqHeight){
         // Raw height and width of image
         final int height = srcImage.height();
@@ -516,5 +510,22 @@ public class IODarkRoom extends AppCompatActivity {
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
         return inSampleSize;
+    }
+
+
+    private Mat addEffect(Mat img, int effect){
+        Mat resultEffect = new Mat();
+        if(effect == RED_BLUE){
+
+            img.copyTo(resultEffect);
+            Mat rbMask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
+            enhanceChannel(resultEffect, rbMask, img);
+            //displayImage(rbEnhanced, idMainImageView);
+        }else if(effect == GREEN_BLUE){
+            img.copyTo(resultEffect);
+            Mat gbMask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(0,1,1,0));
+            enhanceChannel(resultEffect, gbMask, img);
+        }
+        return resultEffect;
     }
 }

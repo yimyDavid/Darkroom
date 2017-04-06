@@ -15,7 +15,8 @@
         <!--android:src="@mipmap/ic_launcher" />-->
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="85dp">
+        android:layout_height="85dp"
+        android:background="@android:color/background_dark">
 
 
         <LinearLayout
@@ -24,22 +25,48 @@
             android:orientation="horizontal">
 
             <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="This is a test"/>-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="This is a test"/>-->
             <ImageView
                 android:id="@+id/ef_one"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom"
                 android:background="@android:color/background_dark"
-                android:scaleType="center" />
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/ef_two"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:background="@android:color/background_dark" />
+                android:background="@android:color/background_dark"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/ef_three"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_dark"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/ef_four"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_dark"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/ef_five"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_dark"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/ef_six"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_dark"
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
     </HorizontalScrollView>
