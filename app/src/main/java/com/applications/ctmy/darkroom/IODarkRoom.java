@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -87,7 +87,19 @@ public class IODarkRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iodark_room);
 
+        ImageView test = (ImageView)findViewById(R.id.red);
 
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Mat redEnhanced = new Mat();
+                sampledImage.copyTo(redEnhanced);
+                Mat redMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,0,0,0));
+
+                enhanceChannel(redEnhanced, redMask, sampledImage);
+                displayImage(redEnhanced, idMainImageView);
+            }
+        });
 
     }
 
@@ -613,8 +625,12 @@ public class IODarkRoom extends AppCompatActivity {
 
         return resultEffect;
     }
+
 }
 
+/**
+ * enum to identify the different effects.
+ */
 enum EffectType{
     E_RED, E_GREEN, E_BLUE,
     E_REDGREEN, E_GREENBLUE, E_REDBLUE,
