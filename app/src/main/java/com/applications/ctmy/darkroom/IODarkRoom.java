@@ -52,6 +52,8 @@ public class IODarkRoom extends AppCompatActivity {
     private final int RED_BLUE = 5;
     private final int GREEN_BLUE = 4;
 
+    private EffectType effects;
+
     // Variables to handle user clicks on the menu
     private static final int SELECT_PICTURE = 1;
     private static final int THUMBNAIL = 1;
@@ -349,25 +351,71 @@ public class IODarkRoom extends AppCompatActivity {
                 Log.i(TAG, "selectedImagePath: " + selectedImagePath);
 
 
-
+                // Main ImageView for the main picture
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+
+                // Mat object to add effects and display them in the imageViews views
                 imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
 
                 sampledImage = transformImage(sampledImage);
                 imageThumbnail = transformImage(imageThumbnail);
-                //loadImage(selectedImagePath);
+
+                // Display main picture/image
                 displayImage(sampledImage, idMainImageView);
-                ImageView thumbnail = (ImageView) findViewById(R.id.ef_one);
-                int idThumbnail = thumbnail.getId();
 
-                ImageView ef2 = (ImageView) findViewById(R.id.ef_two);
-                int efid = ef2.getId();
-                imageThumbnail = addEffect(imageThumbnail, RED_BLUE);
-                displayImage(imageThumbnail, efid);
+                // Loading ImageView's ids for all the effects
+                ImageView thumbnailRed = (ImageView) findViewById(R.id.red);
+                ImageView thumbnailGreen = (ImageView) findViewById(R.id.green);
+                ImageView thumbnailBlue = (ImageView) findViewById(R.id.blue);
+                ImageView thumbnailRedGreen = (ImageView) findViewById(R.id.red_green);
+                ImageView thumbnailGreenBlue = (ImageView) findViewById(R.id.green_blue);
+                ImageView thumbnailRedBlue = (ImageView) findViewById(R.id.red_blue);
+                ImageView thumbnailGrey = (ImageView) findViewById(R.id.grey);
+                ImageView thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
 
-                imageThumbnail = addEffect(imageThumbnail, GREEN_BLUE);
-                displayImage(imageThumbnail, idThumbnail);
-                
+                // Getting id's of the ImageViews
+                int IDRed = thumbnailRed.getId();
+                int IDGreen = thumbnailGreen.getId();
+                int IDBlue = thumbnailBlue.getId();
+                int IDRedGreen = thumbnailRedGreen.getId();
+                int IDGreenBlue = thumbnailGreenBlue.getId();
+                int IDRedBlue = thumbnailRedBlue.getId();
+                int IDGrey = thumbnailGrey.getId();
+                int IDGreyEnhanced = thumbnailGreyEnhanced.getId();
+
+                // Using the same Mat imageThumbnail to display all the effects
+                // on the ImageView's
+                Mat red = imageThumbnail;
+                red = addEffect(red, effects.E_RED);
+                displayImage(red, IDRed);
+
+                Mat green = imageThumbnail;
+                green = addEffect(green, effects.E_GREEN);
+                displayImage(green, IDGreen);
+
+                Mat blue = imageThumbnail;
+                blue = addEffect(blue, effects.E_BLUE);
+                displayImage(blue, IDBlue);
+
+                Mat redgreen = imageThumbnail;
+                redgreen = addEffect(redgreen, effects.E_REDGREEN);
+                displayImage(redgreen, IDRedGreen);
+
+                Mat greenblue = imageThumbnail;
+                greenblue = addEffect(greenblue, effects.E_GREENBLUE);
+                displayImage(greenblue, IDGreenBlue);
+
+                Mat redblue = imageThumbnail;
+                redblue = addEffect(redblue, effects.E_REDBLUE);
+                displayImage(redblue, IDRedBlue);
+
+                Mat gray = imageThumbnail;
+                gray = addEffect(gray, effects.GRAY);
+                displayImage(gray, IDGrey);
+
+                //Mat grayEnhanced = imageThumbnail;
+                gray = addEffect(gray, effects.E_GRAY);
+                displayImage(gray, IDGreyEnhanced);
             }
         }
 
@@ -513,19 +561,63 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
 
-    private Mat addEffect(Mat img, int effect){
+    private Mat addEffect(Mat img, EffectType effect){
         Mat resultEffect = new Mat();
-        if(effect == RED_BLUE){
-
+        if(effect == effects.E_RED){
             img.copyTo(resultEffect);
-            Mat rbMask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
-            enhanceChannel(resultEffect, rbMask, img);
-            //displayImage(rbEnhanced, idMainImageView);
-        }else if(effect == GREEN_BLUE){
-            img.copyTo(resultEffect);
-            Mat gbMask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(0,1,1,0));
-            enhanceChannel(resultEffect, gbMask, img);
+            Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,0,0));
+            enhanceChannel(resultEffect, mask, img);
         }
+        else if(effect == effects.E_GREEN){
+            img.copyTo(resultEffect);
+            Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(0,1,0,0));
+            enhanceChannel(resultEffect, mask, img);
+        }
+        else if(effect == effects.E_BLUE){
+            img.copyTo(resultEffect);
+            Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(0,0,1,0));
+            enhanceChannel(resultEffect, mask, img);
+        }
+        else if(effect == effects.E_REDGREEN){
+            img.copyTo(resultEffect);
+            Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,1,0,0));
+            enhanceChannel(resultEffect, mask, img);
+        }
+        else if(effect == effects.E_GREENBLUE){
+            img.copyTo(resultEffect);
+            Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(0,1,1,0));
+            enhanceChannel(resultEffect, mask, img);
+        }
+        else if(effect == effects.E_REDBLUE){
+            img.copyTo(resultEffect);
+            Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
+            enhanceChannel(resultEffect, mask, img);
+        }
+        else if(effect == effects.GRAY){
+            //greyImage = new Mat();
+           Imgproc.cvtColor(img, resultEffect, Imgproc.COLOR_RGB2GRAY);
+
+            //img.copyTo(resultEffect);
+           // Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
+            //enhanceChannel(resultEffect, mask, img);
+        }
+        else if(effect == effects.E_GRAY){
+           // Mat eqGS = new Mat();
+            Imgproc.equalizeHist(img, resultEffect);
+            //displayImage(resultEffect, idMainImageView);
+
+            //img.copyTo(resultEffect);
+            //Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
+            //enhanceChannel(resultEffect, mask, img);
+        }
+
         return resultEffect;
     }
+}
+
+enum EffectType{
+    E_RED, E_GREEN, E_BLUE,
+    E_REDGREEN, E_GREENBLUE, E_REDBLUE,
+    GRAY, E_GRAY;
+
 }
