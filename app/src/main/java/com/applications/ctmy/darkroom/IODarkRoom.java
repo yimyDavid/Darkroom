@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -96,6 +97,9 @@ public class IODarkRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iodark_room);
 
+
+
+
         // Loading ImageView's ids for all the effects
         thumbnailRed = (ImageView) findViewById(R.id.red);
         thumbnailGreen = (ImageView) findViewById(R.id.green);
@@ -106,9 +110,16 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailGrey = (ImageView) findViewById(R.id.grey);
         thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
 
+
+
         thumbnailRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Mat red = sampledImage;
+                red = addEffect(red, effects.E_RED);
+                displayImage(red, idMainImageView);
+
 
             }
         });
@@ -116,49 +127,69 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailGreen.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                Mat green = sampledImage;
+                green = addEffect(green, effects.E_GREEN);
+                displayImage(green, idMainImageView);
 
             }
         });
+        Mat grey = sampledImage;
 
         thumbnailBlue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
+                Mat blue = sampledImage;
+                blue = addEffect(blue, effects.E_BLUE);
+                displayImage(blue, idMainImageView);
             }
         });
 
         thumbnailRedGreen.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
+                Mat redgreen = sampledImage;
+                redgreen = addEffect(redgreen, effects.E_REDGREEN);
+                displayImage(redgreen, idMainImageView);
             }
         });
 
         thumbnailGreenBlue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
+                Mat greenblue = sampledImage;
+                greenblue = addEffect(greenblue, effects.E_GREENBLUE);
+                displayImage(greenblue, idMainImageView);
             }
         });
 
         thumbnailRedBlue.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                Mat redblue = sampledImage;
+                redblue = addEffect(redblue, effects.E_REDBLUE);
+                displayImage(redblue, idMainImageView);
 
+                view.setBackgroundColor(Color.parseColor("#EE6352"));
+                //thumbnailRedBlue.setBackgroundColor();
             }
         });
 
         thumbnailGrey.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
+                Mat grey = sampledImage;
+                grey = addEffect(grey, effects.GRAY);
+                displayImage(grey, idMainImageView);
             }
         });
 
         thumbnailGreyEnhanced.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
+                Mat gray = sampledImage;
+                gray = addEffect(gray, effects.GRAY);
+                gray = addEffect(gray, effects.E_GRAY);
+                displayImage(gray, idMainImageView);
             }
         });
 
@@ -471,9 +502,7 @@ public class IODarkRoom extends AppCompatActivity {
                 blue = addEffect(blue, effects.E_BLUE);
                 displayImage(blue, IDBlue);
 
-                Mat redgreen = imageThumbnail;
-                redgreen = addEffect(redgreen, effects.E_REDGREEN);
-                displayImage(redgreen, IDRedGreen);
+
 
                 Mat greenblue = imageThumbnail;
                 greenblue = addEffect(greenblue, effects.E_GREENBLUE);
@@ -483,13 +512,17 @@ public class IODarkRoom extends AppCompatActivity {
                 redblue = addEffect(redblue, effects.E_REDBLUE);
                 displayImage(redblue, IDRedBlue);
 
-                Mat gray = imageThumbnail;
-                gray = addEffect(gray, effects.GRAY);
-                displayImage(gray, IDGrey);
+                Mat redgreen = imageThumbnail;
+                redgreen = addEffect(redgreen, effects.E_REDGREEN);
+                displayImage(redgreen, IDRedGreen);
+
+                Mat grey = imageThumbnail;
+                grey = addEffect(grey, effects.GRAY);
+                displayImage(grey, IDGrey);
 
                 //Mat grayEnhanced = imageThumbnail;
-                gray = addEffect(gray, effects.E_GRAY);
-                displayImage(gray, IDGreyEnhanced);
+                grey = addEffect(grey, effects.E_GRAY);
+                displayImage(grey, IDGreyEnhanced);
             }
         }
 

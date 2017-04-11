@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/IODarkRoomImageView"
         android:layout_width="match_parent"
-        android:layout_height="336dp"
+        android:layout_height="376dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:background="@android:color/background_dark"
@@ -15,7 +15,8 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray">
+        android:background="@android:color/darker_gray"
+        android:padding="5dp">
 
 
         <LinearLayout
@@ -29,69 +30,109 @@
             <!--android:text="This is a test"/>-->
             <ImageView
                 android:id="@+id/red"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/green"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/blue"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/red_green"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/green_blue"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/red_blue"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/grey"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/grey_enhanced"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:background="@android:color/background_dark"
+                android:padding="3dp"
+                android:paddingBottom="3dp"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:scaleType="centerCrop" />
         </LinearLayout>
 
     </HorizontalScrollView>
 
-    </LinearLayout>
+</LinearLayout>
