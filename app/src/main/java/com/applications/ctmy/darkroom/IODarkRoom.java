@@ -68,6 +68,15 @@ public class IODarkRoom extends AppCompatActivity {
     ImageView v;
     int idMainImageView;
 
+    private ImageView thumbnailRed;
+    private ImageView thumbnailGreen;
+    private ImageView thumbnailBlue;
+    private ImageView thumbnailRedGreen;
+    private ImageView thumbnailGreenBlue;
+    private ImageView thumbnailRedBlue;
+    private ImageView thumbnailGrey;
+    private ImageView thumbnailGreyEnhanced;
+
 
 //    static{
 //        System.loadLibrary("opencv_java3");
@@ -87,19 +96,72 @@ public class IODarkRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iodark_room);
 
-        ImageView test = (ImageView)findViewById(R.id.red);
+        // Loading ImageView's ids for all the effects
+        thumbnailRed = (ImageView) findViewById(R.id.red);
+        thumbnailGreen = (ImageView) findViewById(R.id.green);
+        thumbnailBlue = (ImageView) findViewById(R.id.blue);
+        thumbnailRedGreen = (ImageView) findViewById(R.id.red_green);
+        thumbnailGreenBlue = (ImageView) findViewById(R.id.green_blue);
+        thumbnailRedBlue = (ImageView) findViewById(R.id.red_blue);
+        thumbnailGrey = (ImageView) findViewById(R.id.grey);
+        thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
 
-        test.setOnClickListener(new View.OnClickListener() {
+        thumbnailRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Mat redEnhanced = new Mat();
-                sampledImage.copyTo(redEnhanced);
-                Mat redMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,0,0,0));
 
-                enhanceChannel(redEnhanced, redMask, sampledImage);
-                displayImage(redEnhanced, idMainImageView);
             }
         });
+
+        thumbnailGreen.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        thumbnailBlue.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        thumbnailRedGreen.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        thumbnailGreenBlue.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        thumbnailRedBlue.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        thumbnailGrey.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        thumbnailGreyEnhanced.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
 
     }
 
@@ -376,14 +438,14 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(sampledImage, idMainImageView);
 
                 // Loading ImageView's ids for all the effects
-                ImageView thumbnailRed = (ImageView) findViewById(R.id.red);
-                ImageView thumbnailGreen = (ImageView) findViewById(R.id.green);
-                ImageView thumbnailBlue = (ImageView) findViewById(R.id.blue);
-                ImageView thumbnailRedGreen = (ImageView) findViewById(R.id.red_green);
-                ImageView thumbnailGreenBlue = (ImageView) findViewById(R.id.green_blue);
-                ImageView thumbnailRedBlue = (ImageView) findViewById(R.id.red_blue);
-                ImageView thumbnailGrey = (ImageView) findViewById(R.id.grey);
-                ImageView thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
+                /*thumbnailRed = (ImageView) findViewById(R.id.red);
+                thumbnailGreen = (ImageView) findViewById(R.id.green);
+                thumbnailBlue = (ImageView) findViewById(R.id.blue);
+                thumbnailRedGreen = (ImageView) findViewById(R.id.red_green);
+                thumbnailGreenBlue = (ImageView) findViewById(R.id.green_blue);
+                thumbnailRedBlue = (ImageView) findViewById(R.id.red_blue);
+                thumbnailGrey = (ImageView) findViewById(R.id.grey);
+                thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);*/
 
                 // Getting id's of the ImageViews
                 int IDRed = thumbnailRed.getId();
