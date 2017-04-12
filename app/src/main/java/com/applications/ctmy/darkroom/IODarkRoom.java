@@ -49,9 +49,7 @@ public class IODarkRoom extends AppCompatActivity {
     // device camera
     private CameraBridgeViewBase mOpenCvCameraView;
 
-    // Variables for identifying effects
-    private final int RED_BLUE = 5;
-    private final int GREEN_BLUE = 4;
+
 
     private EffectType effects;
 
@@ -59,7 +57,6 @@ public class IODarkRoom extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private static final int THUMBNAIL = 1;
     private static final int NORMAL_SIZE = 2;
-    private final int NUMBER_OF_EFFECTS = 2; //8
     private String selectedImagePath;
     Mat sampledImage;
     Mat originalImage;
@@ -97,10 +94,6 @@ public class IODarkRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iodark_room);
 
-
-
-
-        // Loading ImageView's ids for all the effects
         thumbnailRed = (ImageView) findViewById(R.id.red);
         thumbnailGreen = (ImageView) findViewById(R.id.green);
         thumbnailBlue = (ImageView) findViewById(R.id.blue);
@@ -133,7 +126,6 @@ public class IODarkRoom extends AppCompatActivity {
 
             }
         });
-        Mat grey = sampledImage;
 
         thumbnailBlue.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -170,7 +162,6 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(redblue, idMainImageView);
 
                 view.setBackgroundColor(Color.parseColor("#EE6352"));
-                //thumbnailRedBlue.setBackgroundColor();
             }
         });
 
@@ -468,15 +459,6 @@ public class IODarkRoom extends AppCompatActivity {
                 // Display main picture/image
                 displayImage(sampledImage, idMainImageView);
 
-                // Loading ImageView's ids for all the effects
-                /*thumbnailRed = (ImageView) findViewById(R.id.red);
-                thumbnailGreen = (ImageView) findViewById(R.id.green);
-                thumbnailBlue = (ImageView) findViewById(R.id.blue);
-                thumbnailRedGreen = (ImageView) findViewById(R.id.red_green);
-                thumbnailGreenBlue = (ImageView) findViewById(R.id.green_blue);
-                thumbnailRedBlue = (ImageView) findViewById(R.id.red_blue);
-                thumbnailGrey = (ImageView) findViewById(R.id.grey);
-                thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);*/
 
                 // Getting id's of the ImageViews
                 int IDRed = thumbnailRed.getId();
@@ -701,21 +683,12 @@ public class IODarkRoom extends AppCompatActivity {
             enhanceChannel(resultEffect, mask, img);
         }
         else if(effect == effects.GRAY){
-            //greyImage = new Mat();
+
            Imgproc.cvtColor(img, resultEffect, Imgproc.COLOR_RGB2GRAY);
 
-            //img.copyTo(resultEffect);
-           // Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
-            //enhanceChannel(resultEffect, mask, img);
         }
         else if(effect == effects.E_GRAY){
-           // Mat eqGS = new Mat();
             Imgproc.equalizeHist(img, resultEffect);
-            //displayImage(resultEffect, idMainImageView);
-
-            //img.copyTo(resultEffect);
-            //Mat mask = new Mat(img.rows(),img.cols(), img.type(), new Scalar(1,0,1,0));
-            //enhanceChannel(resultEffect, mask, img);
         }
 
         return resultEffect;
