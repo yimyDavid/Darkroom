@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.graphics.Point;
@@ -36,8 +38,11 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 
 public class IODarkRoom extends AppCompatActivity {
@@ -210,12 +215,13 @@ public class IODarkRoom extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.action_openGallery){
-            Intent intent = new Intent();
-            // I HAD THIS WRONG "imag/*
-            intent.setType("image/*");
+            /*Intent intent = new Intent();
+            // I HAD THIS WRONG "imag*//*
+            intent.setType("image*//*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                    SELECT_PICTURE);
+                    SELECT_PICTURE);*/
+            dispatchTakePictureIntent();
             return true;
         }else if(id == R.id.action_Hist){
             if(sampledImage == null){
@@ -445,18 +451,21 @@ public class IODarkRoom extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_IMAGE_CAPTURE){
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap)extras.get("data");
-                v.setImageBitmap(imageBitmap);
+                //Bundle extras = data.getExtras();
+                //Bitmap imageBitmap = (Bitmap)extras.get("data");
+                //v.setImageBitmap(imageBitmap);
+                galleryAddPic();
+                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+                displayImage(sampledImage, idMainImageView);
             }
-           /* if(requestCode == SELECT_PICTURE) {
+           /*if(requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
                 Log.i(TAG, "selectedImagePath: " + selectedImagePath);
 
 
                 // Main ImageView for the main picture
-                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE)*/;
 
                 // Mat object to add effects and display them in the imageViews views
                 imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
@@ -465,7 +474,7 @@ public class IODarkRoom extends AppCompatActivity {
                 imageThumbnail = transformImage(imageThumbnail);
 
                 // Display main picture/image
-                displayImage(sampledImage, idMainImageView);
+                ///displayImage(sampledImage, idMainImageView);
 
 
                 // Getting id's of the ImageViews
@@ -492,8 +501,6 @@ public class IODarkRoom extends AppCompatActivity {
                 blue = addEffect(blue, effects.E_BLUE);
                 displayImage(blue, IDBlue);
 
-
-
                 Mat greenblue = imageThumbnail;
                 greenblue = addEffect(greenblue, effects.E_GREENBLUE);
                 displayImage(greenblue, IDGreenBlue);
@@ -513,7 +520,7 @@ public class IODarkRoom extends AppCompatActivity {
                 //Mat grayEnhanced = imageThumbnail;
                 grey = addEffect(grey, effects.E_GRAY);
                 displayImage(grey, IDGreyEnhanced);
-            }*/
+            ///}
         }
 
     }
@@ -587,12 +594,12 @@ public class IODarkRoom extends AppCompatActivity {
             downSampleRatio /= 4;
 
 
-        Mat temp = resized;
-        temp = new Mat();
-        Imgproc.resize(original, temp, new Size(), downSampleRatio, downSampleRatio,
+        //Mat temp = resized;
+        resized = new Mat();
+        Imgproc.resize(original, resized, new Size(), downSampleRatio, downSampleRatio,
                 Imgproc.INTER_AREA);
 
-        return temp;
+        return resized;
     }
 
     private Mat transformImage(Mat img){
@@ -709,11 +716,59 @@ public class IODarkRoom extends AppCompatActivity {
 
     private void dispatchTakePictureIntent(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if(takePictureIntent.resolveActivity(getPackageManager()) != null){
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            //Create the file where the photo should go
+            File photoFile = null;
+            try{
+                photoFile = createImageFile();
+            }catch(IOException ex){
+                Context c = getApplicationContext();
+                Toast toast = Toast.makeText(c,"Could not load image", Toast.LENGTH_SHORT);
+                toast.show();
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if(photoFile != null){
+                Uri photoURI = FileProvider.getUriForFile(this, "com.applications.ctmy.darkroom.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
+    private File createImageFile() throws IOException{
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg",       /* suffix */
+                storageDir    /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        selectedImagePath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void galleryAddPic(){
+        Intent mediaScanerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(selectedImagePath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanerIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanerIntent);
+    }
+
+    private void setPic(){
+        // Get the dimensions of the Vew
+        int targetW = v.getWidth();
+        int tragetH = v.getHeight();
+
+        // Get the dimensions of the bitmap
+        //BitmapFactory
+    }
 }
 
 /**
