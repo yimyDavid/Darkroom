@@ -49,6 +49,7 @@ public class IODarkRoom extends AppCompatActivity {
     // device camera
     private CameraBridgeViewBase mOpenCvCameraView;
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
 
     private EffectType effects;
@@ -93,6 +94,8 @@ public class IODarkRoom extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iodark_room);
+
+        v = (ImageView)findViewById(R.id.IODarkRoomImageView);
 
         thumbnailRed = (ImageView) findViewById(R.id.red);
         thumbnailGreen = (ImageView) findViewById(R.id.green);
@@ -441,7 +444,12 @@ public class IODarkRoom extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK){
-            if(requestCode == SELECT_PICTURE) {
+            if(requestCode == REQUEST_IMAGE_CAPTURE){
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap)extras.get("data");
+                v.setImageBitmap(imageBitmap);
+            }
+           /* if(requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
                 Log.i(TAG, "selectedImagePath: " + selectedImagePath);
@@ -505,7 +513,7 @@ public class IODarkRoom extends AppCompatActivity {
                 //Mat grayEnhanced = imageThumbnail;
                 grey = addEffect(grey, effects.E_GRAY);
                 displayImage(grey, IDGreyEnhanced);
-            }
+            }*/
         }
 
     }
@@ -692,6 +700,18 @@ public class IODarkRoom extends AppCompatActivity {
         }
 
         return resultEffect;
+    }
+
+
+    /**
+     * Camera functionalities
+     */
+
+    private void dispatchTakePictureIntent(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null){
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
 }
