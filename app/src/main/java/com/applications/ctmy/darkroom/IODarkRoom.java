@@ -39,10 +39,13 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+
+import static android.R.attr.bitmap;
 
 
 public class IODarkRoom extends AppCompatActivity {
@@ -64,6 +67,7 @@ public class IODarkRoom extends AppCompatActivity {
     private static final int THUMBNAIL = 1;
     private static final int NORMAL_SIZE = 2;
     private String selectedImagePath;
+    private String imageFileName;
     Mat sampledImage;
     Mat originalImage;
     Mat imageThumbnail;
@@ -229,10 +233,24 @@ public class IODarkRoom extends AppCompatActivity {
                 noImageMessage(getApplicationContext());
                 return true;
             }
-            Mat histImage = new Mat();
+
+            v.buildDrawingCache();
+            Bitmap bmWithEffect = v.getDrawingCache();
+            File root = Environment.getExternalStorageDirectory();
+            File cachePath = new File(root.getAbsolutePath().toString()  + "/Pictures/" + imageFileName + ".jpg");
+            System.out.println(root.getAbsolutePath().toString());
+            try{
+                cachePath.createNewFile();
+                FileOutputStream ostream = new FileOutputStream(cachePath);
+                bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                ostream.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            /*Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
-            displayImage(histImage, idMainImageView);
+            displayImage(histImage, idMainImageView);*/
             return true;
         }else if(id == R.id.action_togs){
             if(sampledImage == null){
@@ -455,6 +473,8 @@ public class IODarkRoom extends AppCompatActivity {
                 //Bitmap imageBitmap = (Bitmap)extras.get("data");
                 //v.setImageBitmap(imageBitmap);
                 galleryAddPic();
+                // TODO: talvez add la foto despues de aplicar el efecto
+                // TODO: Habilitar la opcion para elegir la foto.
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
             }
@@ -740,7 +760,7 @@ public class IODarkRoom extends AppCompatActivity {
     private File createImageFile() throws IOException{
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName, /* prefix */
@@ -753,6 +773,10 @@ public class IODarkRoom extends AppCompatActivity {
         return image;
     }
 
+    /**
+     *  Adds the picture taken with the camera to the gallery and accessible to
+     *  other apps.
+     */
     private void galleryAddPic(){
         Intent mediaScanerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(selectedImagePath);
