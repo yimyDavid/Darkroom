@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -75,6 +76,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     ImageView v;
     int idMainImageView;
+
 
     private ImageView thumbnailRed;
     private ImageView thumbnailGreen;
@@ -211,7 +213,7 @@ public class IODarkRoom extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
-        v = (ImageView) findViewById(R.id.IODarkRoomImageView);
+        //v = (ImageView) findViewById(R.id.IODarkRoomImageView);
         idMainImageView = v.getId();
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/up button, so long
@@ -231,19 +233,23 @@ public class IODarkRoom extends AppCompatActivity {
             if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
+                System.out.println("the sample image is NULL");
                 return true;
             }
+
+            //v = (ImageView) findViewById(R.id.IODarkRoomImageView);
 
             v.buildDrawingCache();
             Bitmap bmWithEffect = v.getDrawingCache();
             File root = Environment.getExternalStorageDirectory();
             File cachePath = new File(root.getAbsolutePath().toString()  + "/Pictures/" + imageFileName + ".jpg");
-            System.out.println(root.getAbsolutePath().toString());
+            System.out.println(root.getAbsolutePath().toString() + imageFileName);
             try{
                 cachePath.createNewFile();
                 FileOutputStream ostream = new FileOutputStream(cachePath);
                 bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
                 ostream.close();
+                v.destroyDrawingCache();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -469,10 +475,8 @@ public class IODarkRoom extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_IMAGE_CAPTURE){
-                //Bundle extras = data.getExtras();
-                //Bitmap imageBitmap = (Bitmap)extras.get("data");
-                //v.setImageBitmap(imageBitmap);
-                galleryAddPic();
+//                Bundle extras = data.getExtras();
+
                 // TODO: talvez add la foto despues de aplicar el efecto
                 // TODO: Habilitar la opcion para elegir la foto.
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
@@ -660,7 +664,9 @@ public class IODarkRoom extends AppCompatActivity {
 
         // find the imageview and draw it!
         ImageView iv = (ImageView) findViewById(id);
+        ///v = (ImageView) findViewById(id);
         //v = (ImageView) findViewById(R.id.ef_one);
+        ///v.setImageBitmap(bitmap);
         iv.setImageBitmap(bitmap);
     }
 
@@ -785,14 +791,6 @@ public class IODarkRoom extends AppCompatActivity {
         this.sendBroadcast(mediaScanerIntent);
     }
 
-    private void setPic(){
-        // Get the dimensions of the Vew
-        int targetW = v.getWidth();
-        int tragetH = v.getHeight();
-
-        // Get the dimensions of the bitmap
-        //BitmapFactory
-    }
 }
 
 /**
