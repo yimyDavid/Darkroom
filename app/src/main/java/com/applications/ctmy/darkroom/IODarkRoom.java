@@ -234,8 +234,9 @@ public class IODarkRoom extends AppCompatActivity {
                 System.out.println("the sample image is NULL");
                 return true;
             }
-            
+
             saveImageViewImage();
+            galleryAddPic();
 
             /*Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
@@ -781,6 +782,7 @@ public class IODarkRoom extends AppCompatActivity {
             bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
             ostream.close();
             v.destroyDrawingCache();
+
         }catch (Exception e){
             e.printStackTrace();
         }
