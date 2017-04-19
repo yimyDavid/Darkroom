@@ -46,8 +46,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-import static android.R.attr.bitmap;
-
 
 public class IODarkRoom extends AppCompatActivity {
 
@@ -236,23 +234,9 @@ public class IODarkRoom extends AppCompatActivity {
                 System.out.println("the sample image is NULL");
                 return true;
             }
+            
+            saveImageViewImage();
 
-            //v = (ImageView) findViewById(R.id.IODarkRoomImageView);
-
-            v.buildDrawingCache();
-            Bitmap bmWithEffect = v.getDrawingCache();
-            File root = Environment.getExternalStorageDirectory();
-            File cachePath = new File(root.getAbsolutePath().toString()  + "/Pictures/" + imageFileName + ".jpg");
-            System.out.println(root.getAbsolutePath().toString() + imageFileName);
-            try{
-                cachePath.createNewFile();
-                FileOutputStream ostream = new FileOutputStream(cachePath);
-                bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-                ostream.close();
-                v.destroyDrawingCache();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
             /*Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
@@ -475,10 +459,7 @@ public class IODarkRoom extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_IMAGE_CAPTURE){
-//                Bundle extras = data.getExtras();
-
-                // TODO: talvez add la foto despues de aplicar el efecto
-                // TODO: Habilitar la opcion para elegir la foto.
+                galleryAddPic();
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
             }
@@ -664,9 +645,6 @@ public class IODarkRoom extends AppCompatActivity {
 
         // find the imageview and draw it!
         ImageView iv = (ImageView) findViewById(id);
-        ///v = (ImageView) findViewById(id);
-        //v = (ImageView) findViewById(R.id.ef_one);
-        ///v.setImageBitmap(bitmap);
         iv.setImageBitmap(bitmap);
     }
 
@@ -789,6 +767,23 @@ public class IODarkRoom extends AppCompatActivity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanerIntent.setData(contentUri);
         this.sendBroadcast(mediaScanerIntent);
+    }
+
+    private void saveImageViewImage(){
+        v.buildDrawingCache();
+        Bitmap bmWithEffect = v.getDrawingCache();
+        File root = Environment.getExternalStorageDirectory();
+        File cachePath = new File(root.getAbsolutePath().toString()  + "/Pictures/" + imageFileName + ".jpg");
+        System.out.println(root.getAbsolutePath().toString() + imageFileName);
+        try{
+            cachePath.createNewFile();
+            FileOutputStream ostream = new FileOutputStream(cachePath);
+            bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            ostream.close();
+            v.destroyDrawingCache();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
