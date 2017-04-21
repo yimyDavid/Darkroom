@@ -3,27 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_openGallery"
+        android:icon="@mipmap/ic_folder_open_white_48dp"
         android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/action_OpenGallery" />
-    <item android:id="@+id/action_Hist"
+        android:title="@string/action_OpenGallery"
+        app:showAsAction="never|always" />
+    <item
+        android:id="@+id/action_Hist"
         android:orderInCategory="101"
-        app:showAsAction="never"
-        android:title="@string/action_Hist"></item>
+        android:title="@string/action_Hist"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/take_picture"
+        android:icon="@mipmap/ic_camera_alt_white_48dp"
+        android:orderInCategory="102"
+        android:title="Camara"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/share_picture"
+        android:icon="@mipmap/ic_share_white_48dp"
+        android:orderInCategory="103"
+        android:title="share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/save_picture"
+        android:icon="@mipmap/ic_save_white_48dp"
+        android:orderInCategory="104"
+        android:title="save"
+        app:showAsAction="always" />
     <item
         android:id="@+id/enhance_gs"
-        android:title="@string/enhance_gs"
         android:enabled="true"
+        android:title="@string/enhance_gs"
+        android:titleCondensed="@string/enhance_gs_small"
         android:visible="true"
-        app:showAsAction="always"
-        android:titleCondensed="@string/enhance_gs_small">
+        app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/action_togs"
-                android:title="@string/action_ctgs"/>
+                android:title="@string/action_ctgs" />
             <item
                 android:id="@+id/action_egs"
-                android:title="@string/action_eqgsistring"/>
+                android:title="@string/action_eqgsistring" />
         </menu>
     </item>
     <item
@@ -31,66 +51,66 @@
         android:titleCondensed="@string/action_enhanceHSV"
         android:title="@string/action_enhanceHSV"
         android:enabled="true"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:visible="true"></item>
     <item
         android:id="@+id/action_RGB"
+        android:enabled="true"
         android:title="@string/action_RGB"
         android:titleCondensed="@string/action_enhanceRGB_small"
-        android:enabled="true"
-        app:showAsAction="always"
-        android:visible="true">
+        android:visible="true"
+        app:showAsAction="never">
 
         <menu>
             <item
                 android:id="@+id/action_ER"
-                android:titleCondensed="@string/action_enhance_red_small"
-                android:title="@string/action_enhance_red"
-                app:showAsAction="ifRoom"
-                android:visible="true"
                 android:enabled="true"
-                android:orderInCategory="1"/>
+                android:orderInCategory="1"
+                android:title="@string/action_enhance_red"
+                android:titleCondensed="@string/action_enhance_red_small"
+                android:visible="true"
+                app:showAsAction="ifRoom" />
 
             <item
                 android:id="@+id/action_EG"
-                app:showAsAction="ifRoom"
-                android:visible="true"
                 android:enabled="true"
-                android:titleCondensed="@string/action_enhance_green_small"
+                android:orderInCategory="2"
                 android:title="@string/action_enhance_green"
-                android:orderInCategory="2"/>
+                android:titleCondensed="@string/action_enhance_green_small"
+                android:visible="true"
+                app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_EB"
-                app:showAsAction="ifRoom"
-                android:visible="true"
                 android:enabled="true"
+                android:orderInCategory="3"
                 android:title="@string/action_enhance_blue"
                 android:titleCondensed="@string/action_enhance_blue_small"
-                android:orderInCategory="3"/>
+                android:visible="true"
+                app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_ERG"
-                app:showAsAction="ifRoom"
-                android:visible="true"
                 android:enabled="true"
-                android:titleCondensed="@string/action_enhance_red_green_small"
+                android:orderInCategory="3"
                 android:title="@string/action_enhance_red_green"
-                android:orderInCategory="3"/>
+                android:titleCondensed="@string/action_enhance_red_green_small"
+                android:visible="true"
+                app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_EGB"
-                app:showAsAction="ifRoom"
-                android:visible="true"
                 android:enabled="true"
-                android:titleCondensed="@string/action_enhance_green_blue_small"
+                android:orderInCategory="3"
                 android:title="@string/action_enhance_green_blue"
-                android:orderInCategory="3"/>
+                android:titleCondensed="@string/action_enhance_green_blue_small"
+                android:visible="true"
+                app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_ERB"
-                app:showAsAction="ifRoom"
-                android:visible="true"
                 android:enabled="true"
-                android:titleCondensed="@string/action_enhance_red_blue_small"
+                android:orderInCategory="3"
                 android:title="@string/action_enhance_red_blue"
-                android:orderInCategory="3"/>
+                android:titleCondensed="@string/action_enhance_red_blue_small"
+                android:visible="true"
+                app:showAsAction="ifRoom" />
 
         </menu>
     </item>

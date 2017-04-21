@@ -4,34 +4,22 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/IODarkRoomImageView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6">
-
-        <ImageView
-            android:id="@+id/IODarkRoomImageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:background="@color/mainImageView"
-            android:paddingBottom="3dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:paddingTop="3dp"
-            android:scaleType="fitCenter" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_weight="80"
+        android:background="@color/mainImageView"
+        android:paddingBottom="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:paddingTop="3dp"
+        android:scaleType="centerInside" />
         <!--android:src="@mipmap/ic_launcher" />-->
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:text="Take a Picture\n         or\n select"
-            android:textColor="#ffffff"
-            android:textSize="24dp" />
-    </FrameLayout>
+
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -54,7 +42,7 @@
             <ImageView
                 android:id="@+id/red"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -67,7 +55,7 @@
             <ImageView
                 android:id="@+id/green"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -80,7 +68,7 @@
             <ImageView
                 android:id="@+id/blue"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -93,7 +81,7 @@
             <ImageView
                 android:id="@+id/red_green"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -106,7 +94,7 @@
             <ImageView
                 android:id="@+id/green_blue"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -119,7 +107,7 @@
             <ImageView
                 android:id="@+id/red_blue"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -132,7 +120,7 @@
             <ImageView
                 android:id="@+id/grey"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
@@ -145,7 +133,7 @@
             <ImageView
                 android:id="@+id/grey_enhanced"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
