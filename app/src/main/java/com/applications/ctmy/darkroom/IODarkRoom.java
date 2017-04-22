@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -103,7 +104,9 @@ public class IODarkRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.activity_iodark_room);
+        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.mipmap.ic_color_lens_white_48dp);
 
         v = (ImageView)findViewById(R.id.IODarkRoomImageView);
 
@@ -204,9 +207,12 @@ public class IODarkRoom extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
 
+        getSupportActionBar().setIcon(R.mipmap.ic_color_lens_white_48dp);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.iodark_room, menu);
         return super.onCreateOptionsMenu(menu);
+
+
     }
 
     @Override

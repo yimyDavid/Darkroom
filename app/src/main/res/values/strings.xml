@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DR</string>
+    <string name="app_name">Editor</string>
     <string name="action_OpenGallery">Open Gallery</string>
     <string name="action_Hist">Histogram</string>
     <string name="enhance_gs">Enhance GS</string>

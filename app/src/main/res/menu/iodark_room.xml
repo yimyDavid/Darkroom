@@ -6,7 +6,7 @@
         android:icon="@mipmap/ic_folder_open_white_48dp"
         android:orderInCategory="100"
         android:title="@string/action_OpenGallery"
-        app:showAsAction="never|always" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_Hist"
         android:orderInCategory="101"
