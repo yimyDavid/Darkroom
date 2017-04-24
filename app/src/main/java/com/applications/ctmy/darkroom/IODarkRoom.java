@@ -105,6 +105,8 @@ public class IODarkRoom extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
+        // Hide Notification bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_iodark_room);
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.mipmap.ic_color_lens_white_48dp);
 
@@ -226,30 +228,38 @@ public class IODarkRoom extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.action_openGallery){
-            /*Intent intent = new Intent();
-            // I HAD THIS WRONG "imag*//*
+            Intent intent = new Intent();
+            // I HAD THIS WRONG "imag*/
             intent.setType("image*//*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
+            // TODO: use a string resource to translate to spanish
             startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                    SELECT_PICTURE);*/
+                    SELECT_PICTURE);
+            return true;
+
+        }else if(id == R.id.take_picture){
             dispatchTakePictureIntent();
             return true;
-        }else if(id == R.id.action_Hist){
+
+        }else if(id == R.id.save_picture){
             if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
+                // TODO: use a string resource to translate to spanish
                 System.out.println("the sample image is NULL");
                 return true;
             }
 
             saveImageViewImage();
             galleryAddPic();
-
-            /*Mat histImage = new Mat();
+        }
+        else if(id == R.id.action_Hist){
+            Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
-            displayImage(histImage, idMainImageView);*/
+            displayImage(histImage, idMainImageView);
             return true;
+
         }else if(id == R.id.action_togs){
             if(sampledImage == null){
 
