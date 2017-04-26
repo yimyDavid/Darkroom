@@ -58,7 +58,7 @@ public class IODarkRoom extends AppCompatActivity {
     // device camera
     private CameraBridgeViewBase mOpenCvCameraView;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
 
 
     private EffectType effects;
@@ -108,6 +108,7 @@ public class IODarkRoom extends AppCompatActivity {
         // Hide Notification bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_iodark_room);
+        // Currently it seems to have no effect.
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.mipmap.ic_color_lens_white_48dp);
 
         v = (ImageView)findViewById(R.id.IODarkRoomImageView);
@@ -229,12 +230,14 @@ public class IODarkRoom extends AppCompatActivity {
 
         if(id == R.id.action_openGallery){
             Intent intent = new Intent();
-            // I HAD THIS WRONG "imag*/
-            intent.setType("image*//*");
+            // I HAD THIS WRONG "imag*//*
+            intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             // TODO: use a string resource to translate to spanish
             startActivityForResult(Intent.createChooser(intent, "Select Picture"),
                     SELECT_PICTURE);
+
+
             return true;
 
         }else if(id == R.id.take_picture){
@@ -481,24 +484,20 @@ public class IODarkRoom extends AppCompatActivity {
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
             }
-           /*if(requestCode == SELECT_PICTURE) {
+
+            else if(requestCode == SELECT_PICTURE){
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
                 Log.i(TAG, "selectedImagePath: " + selectedImagePath);
-
-
-                // Main ImageView for the main picture
-                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE)*/;
+                sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+                displayImage(sampledImage, idMainImageView);
+            }
 
                 // Mat object to add effects and display them in the imageViews views
                 imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
 
                 sampledImage = transformImage(sampledImage);
                 imageThumbnail = transformImage(imageThumbnail);
-
-                // Display main picture/image
-                ///displayImage(sampledImage, idMainImageView);
-
 
                 // Getting id's of the ImageViews
                 int IDRed = thumbnailRed.getId();
@@ -791,8 +790,8 @@ public class IODarkRoom extends AppCompatActivity {
         v.buildDrawingCache();
         Bitmap bmWithEffect = v.getDrawingCache();
         File root = Environment.getExternalStorageDirectory();
-        File cachePath = new File(root.getAbsolutePath().toString()  + "/Pictures/" + imageFileName + ".jpg");
-        System.out.println(root.getAbsolutePath().toString() + imageFileName);
+        File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
+        System.out.println(root.getAbsolutePath() + imageFileName);
         try{
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);
