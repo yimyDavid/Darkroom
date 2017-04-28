@@ -231,12 +231,14 @@ public class IODarkRoom extends AppCompatActivity {
         if(id == R.id.action_openGallery){
             Intent intent = new Intent();
             // I HAD THIS WRONG "imag*//*
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+            ///intent.setType("image/*");
+            ///intent.setAction(Intent.ACTION_GET_CONTENT);
             // TODO: use a string resource to translate to spanish
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                    SELECT_PICTURE);
+            ///startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+               ///     SELECT_PICTURE);
 
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(galleryIntent, SELECT_PICTURE);
 
             return true;
 
