@@ -62,6 +62,7 @@ public class IODarkRoom extends AppCompatActivity {
 
 
     private EffectType effects;
+    private EffectType currentEffect;
 
     // Variables to handle user clicks on the menu
     private static final int SELECT_PICTURE = 1;
@@ -130,6 +131,8 @@ public class IODarkRoom extends AppCompatActivity {
 
                 Mat red = sampledImage;
                 red = addEffect(red, effects.E_RED);
+
+                currentEffect = effects.E_RED;
                 displayImage(red, idMainImageView);
 
 
@@ -255,8 +258,15 @@ public class IODarkRoom extends AppCompatActivity {
                 return true;
             }
 
-            saveImageViewImage();
-            galleryAddPic();
+
+            ///saveImageViewImage();
+            Mat rgbImage = new Mat();
+            Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
+            rgbImage = addEffect(rgbImage, currentEffect);
+            Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
+            Utils.matToBitmap(rgbImage, bitmap);
+            saveImageViewImage(bitmap);
+            ///galleryAddPic();
         }
         else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
@@ -788,16 +798,18 @@ public class IODarkRoom extends AppCompatActivity {
         this.sendBroadcast(mediaScanerIntent);
     }
 
-    private void saveImageViewImage(){
-        v.buildDrawingCache();
-        Bitmap bmWithEffect = v.getDrawingCache();
+    private void saveImageViewImage(Bitmap bmp){
+        ///v.buildDrawingCache();
+        ///Bitmap bmWithEffect = v.getDrawingCache();
+
         File root = Environment.getExternalStorageDirectory();
         File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
         System.out.println(root.getAbsolutePath() + imageFileName);
         try{
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);
-            bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            ///bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
             ostream.close();
             v.destroyDrawingCache();
 
