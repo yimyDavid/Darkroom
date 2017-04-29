@@ -144,6 +144,8 @@ public class IODarkRoom extends AppCompatActivity {
             public void onClick(View view){
                 Mat green = sampledImage;
                 green = addEffect(green, effects.E_GREEN);
+
+                currentEffect = effects.E_GREEN;
                 displayImage(green, idMainImageView);
 
             }
@@ -154,6 +156,8 @@ public class IODarkRoom extends AppCompatActivity {
             public void onClick(View view){
                 Mat blue = sampledImage;
                 blue = addEffect(blue, effects.E_BLUE);
+
+                currentEffect = effects.E_BLUE;
                 displayImage(blue, idMainImageView);
             }
         });
@@ -163,6 +167,8 @@ public class IODarkRoom extends AppCompatActivity {
             public void onClick(View view){
                 Mat redgreen = sampledImage;
                 redgreen = addEffect(redgreen, effects.E_REDGREEN);
+
+                currentEffect = effects.E_REDGREEN;
                 displayImage(redgreen, idMainImageView);
             }
         });
@@ -172,6 +178,8 @@ public class IODarkRoom extends AppCompatActivity {
             public void onClick(View view){
                 Mat greenblue = sampledImage;
                 greenblue = addEffect(greenblue, effects.E_GREENBLUE);
+
+                currentEffect = effects.E_GREENBLUE;
                 displayImage(greenblue, idMainImageView);
             }
         });
@@ -181,6 +189,8 @@ public class IODarkRoom extends AppCompatActivity {
             public void onClick(View view){
                 Mat redblue = sampledImage;
                 redblue = addEffect(redblue, effects.E_REDBLUE);
+
+                currentEffect = effects.E_REDBLUE;
                 displayImage(redblue, idMainImageView);
 
                 view.setBackgroundColor(Color.parseColor("#EE6352"));
@@ -192,6 +202,8 @@ public class IODarkRoom extends AppCompatActivity {
             public void onClick(View view){
                 Mat grey = sampledImage;
                 grey = addEffect(grey, effects.GRAY);
+
+                currentEffect = effects.GRAY;
                 displayImage(grey, idMainImageView);
             }
         });
@@ -202,6 +214,8 @@ public class IODarkRoom extends AppCompatActivity {
                 Mat gray = sampledImage;
                 gray = addEffect(gray, effects.GRAY);
                 gray = addEffect(gray, effects.E_GRAY);
+
+                currentEffect = effects.E_GRAY;
                 displayImage(gray, idMainImageView);
             }
         });
@@ -495,6 +509,7 @@ public class IODarkRoom extends AppCompatActivity {
                 galleryAddPic();
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
+
             }
 
             else if(requestCode == SELECT_PICTURE){
@@ -503,6 +518,9 @@ public class IODarkRoom extends AppCompatActivity {
                 Log.i(TAG, "selectedImagePath: " + selectedImagePath);
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
+                //TODO Create name of the file selected. Not too happy
+                imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length());
+                System.out.println(imageFileName+".jpg");
             }
 
                 // Mat object to add effects and display them in the imageViews views
@@ -783,6 +801,7 @@ public class IODarkRoom extends AppCompatActivity {
 
         // Save a file: path for use with ACTION_VIEW intents
         selectedImagePath = image.getAbsolutePath();
+        System.out.println(selectedImagePath + " Yimy" );
         return image;
     }
 
@@ -809,7 +828,7 @@ public class IODarkRoom extends AppCompatActivity {
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);
             ///bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
             ostream.close();
             v.destroyDrawingCache();
 
