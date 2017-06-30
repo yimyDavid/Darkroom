@@ -193,7 +193,7 @@ public class IODarkRoom extends AppCompatActivity {
                 currentEffect = effects.E_REDBLUE;
                 displayImage(redblue, idMainImageView);
 
-                view.setBackgroundColor(Color.parseColor("#EE6352"));
+                //view.setBackgroundColor(Color.parseColor("#EE6352"));
             }
         });
 
@@ -246,7 +246,7 @@ public class IODarkRoom extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.action_openGallery){
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
             // I HAD THIS WRONG "imag*//*
             ///intent.setType("image/*");
             ///intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -272,10 +272,14 @@ public class IODarkRoom extends AppCompatActivity {
                 return true;
             }
 
-
             ///saveImageViewImage();
             Mat rgbImage = new Mat();
             Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
+
+            // Convert to gray before gray enhancing.
+            if(currentEffect == effects.E_GRAY){
+                rgbImage = addEffect(rgbImage, effects.GRAY);
+            }
             rgbImage = addEffect(rgbImage, currentEffect);
             Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(rgbImage, bitmap);
@@ -515,12 +519,13 @@ public class IODarkRoom extends AppCompatActivity {
             else if(requestCode == SELECT_PICTURE){
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
-                Log.i(TAG, "selectedImagePath: " + selectedImagePath);
+                //Log.i(TAG, "selectedImagePath: " + selectedImagePath);
+                System.out.println(selectedImagePath + " YIMY");
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
                 //TODO Create name of the file selected. Not too happy
-                imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length());
-                System.out.println(imageFileName+".jpg");
+                imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length()-4);
+
             }
 
                 // Mat object to add effects and display them in the imageViews views
@@ -592,8 +597,10 @@ public class IODarkRoom extends AppCompatActivity {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             String s = cursor.getString(column_index);
+            cursor.close();
             return s;
         }
+        cursor.close();
         return uri.getPath();
     }
 
@@ -606,25 +613,6 @@ public class IODarkRoom extends AppCompatActivity {
         Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
 
        Mat resizedTemp = resize(rgbImage, img, type);
-        /*try{
-            ExifInterface exif = new ExifInterface(selectedImagePath);
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-
-            switch (orientation)
-            {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    sampledImage = sampledImage.t();
-                    Core.flip(sampledImage, sampledImage, 1);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    sampledImage = sampledImage.t();
-                    Core.flip(sampledImage, sampledImage, 0);
-                    break;
-
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }*/
 
         return resizedTemp;
     }
@@ -754,6 +742,7 @@ public class IODarkRoom extends AppCompatActivity {
 
         }
         else if(effect == effects.E_GRAY){
+
             Imgproc.equalizeHist(img, resultEffect);
         }
 
