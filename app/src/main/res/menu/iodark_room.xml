@@ -23,7 +23,8 @@
         android:icon="@mipmap/ic_share_white_48dp"
         android:orderInCategory="103"
         android:title="share"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:actionProviderClass="android.widget.ShareActionProvider"/>
     <item
         android:id="@+id/save_picture"
         android:icon="@mipmap/ic_save_white_48dp"

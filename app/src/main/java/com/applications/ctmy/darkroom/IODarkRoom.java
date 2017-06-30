@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.graphics.Point;
 import android.view.Display;
@@ -77,6 +78,9 @@ public class IODarkRoom extends AppCompatActivity {
 
     ImageView v;
     int idMainImageView;
+
+    //Action provider to share content
+    private ShareActionProvider mShareActionProvider;
 
 
     private ImageView thumbnailRed;
@@ -285,8 +289,9 @@ public class IODarkRoom extends AppCompatActivity {
             Utils.matToBitmap(rgbImage, bitmap);
             saveImageViewImage(bitmap);
             ///galleryAddPic();
-        }
-        else if(id == R.id.action_Hist){
+        }else if(id == R.id.share_picture){
+            MenuItem shareItem = menu.findItem(R.id.share_picture);
+        } else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
