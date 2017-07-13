@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
@@ -45,6 +46,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -228,12 +230,30 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
 
+    public void prepareShareIntent(Bitmap bmp){
+        // Sends text through ActionProvider
+       /* Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, testText);
+        mShareActionProvider.setShareIntent(intent);*/
+
+
+        File image = new File(imageFileName + "jpg");
+        Intent intentShareImg = new Intent(Intent.ACTION_SEND);
+        intentShareImg.setType("imag/*");
+        intentShareImg.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(image));
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
 
         getSupportActionBar().setIcon(R.mipmap.ic_color_lens_white_48dp);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.iodark_room, menu);
+
+        MenuItem shareImage = menu.findItem(R.id.share_picture);
+        mShareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareImage);
+        //prepareShareIntent("Sending Picture");
         return super.onCreateOptionsMenu(menu);
 
 
@@ -288,10 +308,31 @@ public class IODarkRoom extends AppCompatActivity {
             Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(rgbImage, bitmap);
             saveImageViewImage(bitmap);
-            ///galleryAddPic();
         }else if(id == R.id.share_picture){
-            MenuItem shareItem = menu.findItem(R.id.share_picture);
-        } else if(id == R.id.action_Hist){
+            //mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+            /* Share provider does not respond to onOptionItemSelected() method */
+            if(sampledImage == null){
+
+                noImageMessage(getApplicationContext());
+                // TODO: use a string resource to translate to spanish
+                System.out.println("the sample image is NULL");
+                return true;
+            }
+
+            ///saveImageViewImage();
+            Mat rgbImage = new Mat();
+            Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
+
+            // Convert to gray before gray enhancing.
+            if(currentEffect == effects.E_GRAY){
+                rgbImage = addEffect(rgbImage, effects.GRAY);
+            }
+            rgbImage = addEffect(rgbImage, currentEffect);
+            Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
+            Utils.matToBitmap(rgbImage, bitmap);
+            saveImageViewImage(bitmap);
+
+        }else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
@@ -789,7 +830,7 @@ public class IODarkRoom extends AppCompatActivity {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName, /* prefix */
-                ".jpg",       /* suffix */
+                "jpg",       /* suffix */
                 storageDir    /* directory */
         );
 
@@ -816,8 +857,8 @@ public class IODarkRoom extends AppCompatActivity {
         ///Bitmap bmWithEffect = v.getDrawingCache();
 
         File root = Environment.getExternalStorageDirectory();
-        File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
-        System.out.println(root.getAbsolutePath() + imageFileName);
+        File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + "jpg");
+        System.out.println(root.getAbsolutePath() + imageFileName + " dfdf " + cachePath.getPath());
         try{
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);

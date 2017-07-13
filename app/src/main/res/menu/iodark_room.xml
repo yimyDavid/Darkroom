@@ -11,7 +11,7 @@
         android:id="@+id/action_Hist"
         android:orderInCategory="101"
         android:title="@string/action_Hist"
-        app:showAsAction="never"></item>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/take_picture"
         android:icon="@mipmap/ic_camera_alt_white_48dp"
@@ -20,11 +20,10 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/share_picture"
-        android:icon="@mipmap/ic_share_white_48dp"
         android:orderInCategory="103"
         android:title="share"
         app:showAsAction="always"
-        android:actionProviderClass="android.widget.ShareActionProvider"/>
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
     <item
         android:id="@+id/save_picture"
         android:icon="@mipmap/ic_save_white_48dp"
