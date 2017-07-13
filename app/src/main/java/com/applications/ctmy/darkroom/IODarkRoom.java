@@ -83,6 +83,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     //Action provider to share content
     private ShareActionProvider mShareActionProvider;
+    File cachePath;
 
 
     private ImageView thumbnailRed;
@@ -229,8 +230,8 @@ public class IODarkRoom extends AppCompatActivity {
 
     }
 
-
-    public void prepareShareIntent(Bitmap bmp){
+    Intent p;
+    public void prepareShareIntent(){
         // Sends text through ActionProvider
        /* Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -238,10 +239,17 @@ public class IODarkRoom extends AppCompatActivity {
         mShareActionProvider.setShareIntent(intent);*/
 
 
-        File image = new File(imageFileName + "jpg");
+
+        File image = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + "jpg");
+
         Intent intentShareImg = new Intent(Intent.ACTION_SEND);
         intentShareImg.setType("imag/*");
-        intentShareImg.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(image));
+
+        if(cachePath == null)
+            intentShareImg.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(image));
+        else
+            intentShareImg.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(cachePath));
+        mShareActionProvider.setShareIntent(intentShareImg);
 
     }
     @Override
@@ -253,9 +261,8 @@ public class IODarkRoom extends AppCompatActivity {
 
         MenuItem shareImage = menu.findItem(R.id.share_picture);
         mShareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareImage);
-        //prepareShareIntent("Sending Picture");
+        //prepareShareIntent();
         return super.onCreateOptionsMenu(menu);
-
 
     }
 
@@ -330,7 +337,12 @@ public class IODarkRoom extends AppCompatActivity {
             rgbImage = addEffect(rgbImage, currentEffect);
             Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(rgbImage, bitmap);
+
             saveImageViewImage(bitmap);
+            prepareShareIntent();
+
+           // mShareActionProvider.setShareIntent();
+
 
         }else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
@@ -830,7 +842,7 @@ public class IODarkRoom extends AppCompatActivity {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName, /* prefix */
-                "jpg",       /* suffix */
+                ".jpg",       /* suffix */
                 storageDir    /* directory */
         );
 
@@ -857,7 +869,7 @@ public class IODarkRoom extends AppCompatActivity {
         ///Bitmap bmWithEffect = v.getDrawingCache();
 
         File root = Environment.getExternalStorageDirectory();
-        File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + "jpg");
+        cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + "jpg");
         System.out.println(root.getAbsolutePath() + imageFileName + " dfdf " + cachePath.getPath());
         try{
             cachePath.createNewFile();
