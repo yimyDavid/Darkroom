@@ -71,7 +71,7 @@ public class IODarkRoom extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private static final int THUMBNAIL = 1;
     private static final int NORMAL_SIZE = 2;
-    private String selectedImagePath;
+    private String selectedImagePath = "";
     private String imageFileName;
     Mat sampledImage;
     Mat originalImage;
@@ -230,8 +230,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     }
 
-    Intent p;
-    public void prepareShareIntent(){
+    public Intent prepareShareIntent(Uri uriPath){
         // Sends text through ActionProvider
        /* Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -240,28 +239,44 @@ public class IODarkRoom extends AppCompatActivity {
 
 
 
-        File image = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + "jpg");
+       // File image = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg");
+       //  File image = new File(path);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image/jpeg");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uriPath);
 
-        Intent intentShareImg = new Intent(Intent.ACTION_SEND);
-        intentShareImg.setType("imag/*");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 
-        if(cachePath == null)
-            intentShareImg.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(image));
-        else
-            intentShareImg.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(cachePath));
-        mShareActionProvider.setShareIntent(intentShareImg);
+        return shareIntent;
 
+    }
+
+    private void setShareIntent(Intent shareIntent){
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
 
         getSupportActionBar().setIcon(R.mipmap.ic_color_lens_white_48dp);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.iodark_room, menu);
 
-        MenuItem shareImage = menu.findItem(R.id.share_picture);
-        mShareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareImage);
-        //prepareShareIntent();
+        getMenuInflater().inflate(R.menu.iodark_room, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.share_picture);
+
+        // Fech and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+
+        File root = Environment.getExternalStorageDirectory();
+        String path = root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg";
+        Uri uriPath = Uri.parse(selectedImagePath);
+        // Set it for the first time
+        mShareActionProvider.setShareIntent(prepareShareIntent(uriPath));
+
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -339,10 +354,16 @@ public class IODarkRoom extends AppCompatActivity {
             Utils.matToBitmap(rgbImage, bitmap);
 
             saveImageViewImage(bitmap);
-            prepareShareIntent();
 
-           // mShareActionProvider.setShareIntent();
+            File root = Environment.getExternalStorageDirectory();
+            String path = root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg";
+            Uri uriPath = Uri.parse(selectedImagePath);
+            //prepareShareIntent();
+            System.out.println(path + "  tina");
+            mShareActionProvider.setShareIntent(prepareShareIntent(uriPath));
 
+
+            return true;
 
         }else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
@@ -869,7 +890,7 @@ public class IODarkRoom extends AppCompatActivity {
         ///Bitmap bmWithEffect = v.getDrawingCache();
 
         File root = Environment.getExternalStorageDirectory();
-        cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + "jpg");
+        cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
         System.out.println(root.getAbsolutePath() + imageFileName + " dfdf " + cachePath.getPath());
         try{
             cachePath.createNewFile();
