@@ -78,12 +78,14 @@ public class IODarkRoom extends AppCompatActivity {
     Mat imageThumbnail;
     Mat greyImage;
 
+    private String imageToShare = "";
+
     ImageView v;
     int idMainImageView;
 
     //Action provider to share content
     private ShareActionProvider mShareActionProvider;
-    File cachePath;
+    File cachePath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg");
 
 
     private ImageView thumbnailRed;
@@ -230,7 +232,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     }
 
-    public Intent prepareShareIntent(Uri uriPath){
+    public Intent prepareShareIntent(){
         // Sends text through ActionProvider
        /* Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -244,10 +246,10 @@ public class IODarkRoom extends AppCompatActivity {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/jpeg");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uriPath);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imageToShare));
 
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
-
+        //startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+        mShareActionProvider.setShareIntent(shareIntent);
         return shareIntent;
 
     }
@@ -268,14 +270,16 @@ public class IODarkRoom extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.share_picture);
 
         // Fech and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+       /// mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        mShareActionProvider = new ShareActionProvider(this);
+        MenuItemCompat.setActionProvider(item, mShareActionProvider);
 
 
         File root = Environment.getExternalStorageDirectory();
         String path = root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg";
         Uri uriPath = Uri.parse(selectedImagePath);
         // Set it for the first time
-        mShareActionProvider.setShareIntent(prepareShareIntent(uriPath));
+        mShareActionProvider.setShareIntent(prepareShareIntent());
 
         return super.onCreateOptionsMenu(menu);
 
@@ -360,7 +364,9 @@ public class IODarkRoom extends AppCompatActivity {
             Uri uriPath = Uri.parse(selectedImagePath);
             //prepareShareIntent();
             System.out.println(path + "  tina");
-            mShareActionProvider.setShareIntent(prepareShareIntent(uriPath));
+
+            if(mShareActionProvider != null)
+                mShareActionProvider.setShareIntent(prepareShareIntent());
 
 
             return true;
@@ -604,6 +610,8 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(sampledImage, idMainImageView);
                 //TODO Create name of the file selected. Not too happy
                 imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length()-4);
+
+                //mShareActionProvider.setShareIntent(prepareShareIntent());
 
             }
 
@@ -892,6 +900,7 @@ public class IODarkRoom extends AppCompatActivity {
         File root = Environment.getExternalStorageDirectory();
         cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
         System.out.println(root.getAbsolutePath() + imageFileName + " dfdf " + cachePath.getPath());
+        imageToShare = cachePath.getPath();
         try{
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);
