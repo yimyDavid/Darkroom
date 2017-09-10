@@ -71,8 +71,8 @@ public class IODarkRoom extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private static final int THUMBNAIL = 1;
     private static final int NORMAL_SIZE = 2;
-    private String selectedImagePath = "";
-    private String imageFileName;
+    private String selectedImagePath;
+    private String imageFileName="";
     Mat sampledImage;
     Mat originalImage;
     Mat imageThumbnail;
@@ -246,9 +246,13 @@ public class IODarkRoom extends AppCompatActivity {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/jpeg");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imageToShare));
 
-        //startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+        if(cachePath.getAbsolutePath() != null)
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(cachePath.getPath()));
+        else
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(selectedImagePath));
+
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
         mShareActionProvider.setShareIntent(shareIntent);
         return shareIntent;
 
@@ -277,9 +281,10 @@ public class IODarkRoom extends AppCompatActivity {
 
         File root = Environment.getExternalStorageDirectory();
         String path = root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg";
-        Uri uriPath = Uri.parse(selectedImagePath);
+        //Uri uriPath = Uri.parse(selectedImagePath);
+        selectedImagePath = path;
         // Set it for the first time
-        mShareActionProvider.setShareIntent(prepareShareIntent());
+       // mShareActionProvider.setShareIntent(prepareShareIntent());
 
         return super.onCreateOptionsMenu(menu);
 
@@ -610,8 +615,6 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(sampledImage, idMainImageView);
                 //TODO Create name of the file selected. Not too happy
                 imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length()-4);
-
-                //mShareActionProvider.setShareIntent(prepareShareIntent());
 
             }
 
