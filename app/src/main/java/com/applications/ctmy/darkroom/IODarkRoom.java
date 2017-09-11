@@ -78,14 +78,12 @@ public class IODarkRoom extends AppCompatActivity {
     Mat imageThumbnail;
     Mat greyImage;
 
-    private String imageToShare = "";
-
     ImageView v;
     int idMainImageView;
 
     //Action provider to share content
     private ShareActionProvider mShareActionProvider;
-    File cachePath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg");
+
 
 
     private ImageView thumbnailRed;
@@ -133,6 +131,11 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
 
 
+
+        /* THUMBNAIL WITH EFFECTS
+         * OnClick events for the thumbnails with the effects applied.
+         * Once the user click on of them, the effect is applied to the main view/image
+         */
 
         thumbnailRed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,31 +232,31 @@ public class IODarkRoom extends AppCompatActivity {
             }
         });
 
+        /*END OF THUMBNAIL WITH EFFECTS*/
+
 
     }
 
+    /**
+     * Sets the intent to share an image with other apps, such as whatsapp, viber, etc.
+     * @return the intent loaded with the image to share.
+     */
+
     public Intent prepareShareIntent(){
-        // Sends text through ActionProvider
-       /* Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, testText);
-        mShareActionProvider.setShareIntent(intent);*/
 
-
-
-       // File image = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg");
+        File image = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg");
        //  File image = new File(path);
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/jpeg");
 
-        if(cachePath.getAbsolutePath() != null)
-            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(cachePath.getPath()));
-        else
-            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(selectedImagePath));
 
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(image.getPath()));
+        // I think the createChooser should be used when not using the ShareActionProvider method.
+        //startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
         mShareActionProvider.setShareIntent(shareIntent);
+        // DEBUG LINE
+        // System.out.println("prepare " + image.getAbsolutePath());
         return shareIntent;
 
     }
@@ -263,6 +266,14 @@ public class IODarkRoom extends AppCompatActivity {
             mShareActionProvider.setShareIntent(shareIntent);
         }
     }
+
+    /**
+     * Used to load the menu from the xml file and run the prepareShareIntent method above.
+     * This methods is only setup once and that's why (after so much trying) I am using
+     * this method invalidateOptionsMenu(); to refresh it.
+     * @param menu Parameter used to inflate the menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
 
@@ -273,18 +284,19 @@ public class IODarkRoom extends AppCompatActivity {
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.share_picture);
 
-        // Fech and store ShareActionProvider
-       /// mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-        mShareActionProvider = new ShareActionProvider(this);
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        //mShareActionProvider = new ShareActionProvider(this);
         MenuItemCompat.setActionProvider(item, mShareActionProvider);
 
 
         File root = Environment.getExternalStorageDirectory();
-        String path = root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg";
+        String path = root.getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg";
         //Uri uriPath = Uri.parse(selectedImagePath);
         selectedImagePath = path;
+        System.out.println("onCreateOptions " + selectedImagePath);
         // Set it for the first time
-       // mShareActionProvider.setShareIntent(prepareShareIntent());
+        setShareIntent(prepareShareIntent());
 
         return super.onCreateOptionsMenu(menu);
 
@@ -301,14 +313,6 @@ public class IODarkRoom extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.action_openGallery){
-            //Intent intent = new Intent();
-            // I HAD THIS WRONG "imag*//*
-            ///intent.setType("image/*");
-            ///intent.setAction(Intent.ACTION_GET_CONTENT);
-            // TODO: use a string resource to translate to spanish
-            ///startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-               ///     SELECT_PICTURE);
-
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(galleryIntent, SELECT_PICTURE);
 
@@ -327,7 +331,6 @@ public class IODarkRoom extends AppCompatActivity {
                 return true;
             }
 
-            ///saveImageViewImage();
             Mat rgbImage = new Mat();
             Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
 
@@ -339,10 +342,10 @@ public class IODarkRoom extends AppCompatActivity {
             Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(rgbImage, bitmap);
             saveImageViewImage(bitmap);
+
         }else if(id == R.id.share_picture){
-            //mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-            /* Share provider does not respond to onOptionItemSelected() method */
-            if(sampledImage == null){
+            /* This method does not do or trigger anything because the action provider*/
+            /*if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
                 // TODO: use a string resource to translate to spanish
@@ -372,7 +375,7 @@ public class IODarkRoom extends AppCompatActivity {
 
             if(mShareActionProvider != null)
                 mShareActionProvider.setShareIntent(prepareShareIntent());
-
+*/
 
             return true;
 
@@ -598,12 +601,14 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        // supuestamente invalida el menu y puede refrescarlo
+        // It works!
+        invalidateOptionsMenu();
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_IMAGE_CAPTURE){
                 galleryAddPic();
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
-
             }
 
             else if(requestCode == SELECT_PICTURE){
@@ -615,6 +620,7 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(sampledImage, idMainImageView);
                 //TODO Create name of the file selected. Not too happy
                 imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length()-4);
+                System.out.println("SELECT_PICTURE " + imageFileName);
 
             }
 
@@ -899,18 +905,16 @@ public class IODarkRoom extends AppCompatActivity {
     private void saveImageViewImage(Bitmap bmp){
         ///v.buildDrawingCache();
         ///Bitmap bmWithEffect = v.getDrawingCache();
-
         File root = Environment.getExternalStorageDirectory();
-        cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
+        File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
         System.out.println(root.getAbsolutePath() + imageFileName + " dfdf " + cachePath.getPath());
-        imageToShare = cachePath.getPath();
         try{
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);
             ///bmWithEffect.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
             bmp.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
             ostream.close();
-            v.destroyDrawingCache();
+            ///v.destroyDrawingCache();
 
         }catch (Exception e){
             e.printStackTrace();

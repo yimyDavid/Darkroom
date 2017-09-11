@@ -21,5 +21,5 @@
     <string name="action_enhance_red_blue_small">ERB</string>
     <string name="action_enhance_blue">Enhance Blue</string>
     <string name="action_enhance_blue_small">EB</string>
-    <string name="send_to">send_to</string>
+    <string name="send_to">Sharing Image</string>
 </resources>
