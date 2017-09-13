@@ -84,6 +84,17 @@ public class IODarkRoom extends AppCompatActivity {
     //Action provider to share content
     private ShareActionProvider mShareActionProvider;
 
+    /* Variables to manage the filters. */
+    // Keys for storing the indices of the active filters.
+    private static final String STATE_CURVE_FILTER_INDEX = "curveFilterIndex";
+
+    // The filters.
+    private Filter[] mCurveFilters;
+
+    // The indices of the active filters.
+    private int mCurveFilterIndex;
+
+
 
 
     private ImageView thumbnailRed;
@@ -96,15 +107,15 @@ public class IODarkRoom extends AppCompatActivity {
     private ImageView thumbnailGreyEnhanced;
 
 
-//    static{
-//        System.loadLibrary("opencv_java3");
-//
-//        if(!OpenCVLoader.initDebug()){
-//            Log.d("ERROR", "Unable to load OpenCV");
-//        }else{
-//            Log.d("SUCCESS", "OpenCV loaded");
-//        }
-//    }
+    static{
+        System.loadLibrary("opencv_java3");
+
+        if(!OpenCVLoader.initDebug()){
+            Log.d("ERROR", "Unable to load OpenCV");
+        }else{
+            Log.d("SUCCESS", "OpenCV loaded");
+        }
+    }
 
 
 
@@ -131,6 +142,11 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
 
 
+        if(savedInstanceState != null){
+            mCurveFilterIndex = savedInstanceState.getInt(STATE_CURVE_FILTER_INDEX, 0);
+        }else{
+            mCurveFilterIndex = 0;
+        }
 
         /* THUMBNAIL WITH EFFECTS
          * OnClick events for the thumbnails with the effects applied.
@@ -237,6 +253,9 @@ public class IODarkRoom extends AppCompatActivity {
 
     }
 
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putInt(STATE_CURVE_FILTER_INDEX, mCurveFilterIndex);
+    }
     /**
      * Sets the intent to share an image with other apps, such as whatsapp, viber, etc.
      * @return the intent loaded with the image to share.
@@ -523,6 +542,21 @@ public class IODarkRoom extends AppCompatActivity {
             Mat rbMask = new Mat(sampledImage.rows(),sampledImage.cols(), sampledImage.type(), new Scalar(1,0,1,0));
             enhanceChannel(rbEnhanced, rbMask, sampledImage);
             displayImage(rbEnhanced, idMainImageView);
+        }else if(id == R.id.menu_context_curve_filter){
+            mCurveFilterIndex++;
+            if(mCurveFilterIndex == mCurveFilters.length){
+                mCurveFilterIndex = 0;
+                System.out.println("yimy index " + mCurveFilterIndex);
+            }
+            System.out.println("curve " + mCurveFilterIndex);
+            Mat curveMat = new Mat();
+            sampledImage.copyTo(curveMat);
+            //Mat curveMat = sampledImage;
+            //Mat cvMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,.4,.2));
+
+            mCurveFilters[mCurveFilterIndex].apply(curveMat, curveMat);
+            displayImage(curveMat, idMainImageView);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -586,6 +620,13 @@ public class IODarkRoom extends AppCompatActivity {
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     Log.i(TAG, "OpenCV loaded successfully");
+                    mCurveFilters = new Filter[]{
+                        new NoneFilter(),
+                        new PortraCurveFilter(),
+                        new CrossProcessCurveFilter(),
+                        new ProviaCurveFilter(),
+                        new VelviaCurveFilter()
+                    };
                 }break;
                 default:{
                     super.onManagerConnected(status);

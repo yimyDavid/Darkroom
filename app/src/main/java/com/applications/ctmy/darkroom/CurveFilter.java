@@ -2,10 +2,14 @@ package com.applications.ctmy.darkroom;
 
 import android.view.animation.LinearInterpolator;
 
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
+
 
 /**
  * Created by yimy on 9/12/17.
@@ -27,7 +31,7 @@ public class CurveFilter implements Filter{
         UnivariateFunction bFunc = newFunc(bValIn, bValOut);
 
         // Create and populate the lookup table.
-        mLUT.create(256, 1, < 256, CvType.CV_8UC4);
+        mLUT.create(256, 1, CvType.CV_8UC1);
         for(int i = 0; i < 256; i++){
             final double v = vFunc.value(i);
             final double r = rFunc.value(v);
@@ -48,8 +52,8 @@ public class CurveFilter implements Filter{
         if(valIn.length > 2){
             interpolator = new SplineInterpolator();
         }else{
-            interpolator = new LinearInterpolator();
+            interpolator = new org.apache.commons.math3.analysis.interpolation.LinearInterpolator();
         }
-        return interpolator.interpolator.interporlate(valIn, valOut);
+        return interpolator.interpolate(valIn, valOut);
     }
 }

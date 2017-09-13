@@ -114,4 +114,9 @@
 
         </menu>
     </item>
+    <item
+        android:id="@+id/menu_context_curve_filter"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/menu_next_curve_filter" />
 </menu>
