@@ -31,19 +31,21 @@ public class CurveFilter implements Filter{
         UnivariateFunction bFunc = newFunc(bValIn, bValOut);
 
         // Create and populate the lookup table.
-        mLUT.create(256, 1, CvType.CV_8UC1);
+        mLUT.create(256, 1, CvType.CV_8UC3);
         for(int i = 0; i < 256; i++){
             final double v = vFunc.value(i);
             final double r = rFunc.value(v);
             final double g = gFunc.value(v);
             final double b = bFunc.value(v);
-            mLUT.put(i, 0, r, g, b, i); // Alpha is unchanged
+            mLUT.put(i, 0, r, g, b); // Alpha is unchanged
+
         }
     }
 
     @Override
     public void apply(final Mat src, final Mat dst){
         // Apply the lookup table.
+        System.out.println(mLUT);
         Core.LUT(src, mLUT, dst);
     }
 

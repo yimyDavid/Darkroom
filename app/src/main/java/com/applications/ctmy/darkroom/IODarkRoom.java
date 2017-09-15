@@ -549,13 +549,13 @@ public class IODarkRoom extends AppCompatActivity {
                 System.out.println("yimy index " + mCurveFilterIndex);
             }
             System.out.println("curve " + mCurveFilterIndex);
-            Mat curveMat = new Mat();
-            sampledImage.copyTo(curveMat);
-            //Mat curveMat = sampledImage;
-            //Mat cvMask = new Mat(sampledImage.rows(), sampledImage.cols(), sampledImage.type(), new Scalar(1,.4,.2));
 
-            mCurveFilters[mCurveFilterIndex].apply(curveMat, curveMat);
-            displayImage(curveMat, idMainImageView);
+            // sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
+            // displayImage(sampledImage, idMainImageView);
+            Mat curveSampleImage = new Mat();
+            sampledImage.copyTo(curveSampleImage);
+            mCurveFilters[mCurveFilterIndex].apply(curveSampleImage, curveSampleImage);
+            displayImage(curveSampleImage, idMainImageView);
             return true;
         }
 
@@ -753,6 +753,7 @@ public class IODarkRoom extends AppCompatActivity {
 
         return resizedTemp;
     }
+
 
     private Mat resize(Mat original, Mat resized, int sizeTo){
 
