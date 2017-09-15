@@ -87,12 +87,15 @@ public class IODarkRoom extends AppCompatActivity {
     /* Variables to manage the filters. */
     // Keys for storing the indices of the active filters.
     private static final String STATE_CURVE_FILTER_INDEX = "curveFilterIndex";
+    private static final String STATE_CONVOLUTION_FILTER_INDEX = "convolutionFilterIndex";
 
     // The filters.
     private Filter[] mCurveFilters;
+    private Filter[] mConvolutionFilters;
 
     // The indices of the active filters.
     private int mCurveFilterIndex;
+    private int mConvolutionFilterIndex;
 
 
 
@@ -144,8 +147,10 @@ public class IODarkRoom extends AppCompatActivity {
 
         if(savedInstanceState != null){
             mCurveFilterIndex = savedInstanceState.getInt(STATE_CURVE_FILTER_INDEX, 0);
+            mConvolutionFilterIndex = savedInstanceState.getInt(STATE_CONVOLUTION_FILTER_INDEX, 0);
         }else{
             mCurveFilterIndex = 0;
+            mConvolutionFilterIndex = 0;
         }
 
         /* THUMBNAIL WITH EFFECTS
@@ -255,6 +260,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     public void onSaveInstanceState(Bundle savedInstanceState){
         savedInstanceState.putInt(STATE_CURVE_FILTER_INDEX, mCurveFilterIndex);
+        savedInstanceState.putInt(STATE_CONVOLUTION_FILTER_INDEX, mConvolutionFilterIndex);
     }
     /**
      * Sets the intent to share an image with other apps, such as whatsapp, viber, etc.
@@ -557,6 +563,22 @@ public class IODarkRoom extends AppCompatActivity {
             mCurveFilters[mCurveFilterIndex].apply(curveSampleImage, curveSampleImage);
             displayImage(curveSampleImage, idMainImageView);
             return true;
+        }else if(id == R.id.menu_next_convolution_filter){
+            if(sampledImage == null){
+                noImageMessage(getApplicationContext());
+                return true;
+            }
+
+            mConvolutionFilterIndex++;
+            if(mConvolutionFilterIndex == mConvolutionFilters.length){
+                mConvolutionFilterIndex = 0;
+            }
+
+            Mat convolutionSampleImage = new Mat();
+            sampledImage.copyTo(convolutionSampleImage);
+            mConvolutionFilters[mConvolutionFilterIndex].apply(convolutionSampleImage, convolutionSampleImage);
+            displayImage(convolutionSampleImage, idMainImageView);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -626,6 +648,10 @@ public class IODarkRoom extends AppCompatActivity {
                         new CrossProcessCurveFilter(),
                         new ProviaCurveFilter(),
                         new VelviaCurveFilter()
+                    };
+                    mConvolutionFilters = new Filter[]{
+                            new NoneFilter(),
+                            new StrokeEdgeFilter()
                     };
                 }break;
                 default:{

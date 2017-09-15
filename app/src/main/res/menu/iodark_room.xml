@@ -119,4 +119,10 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom|withText"
         android:title="@string/menu_next_curve_filter" />
+    <item
+        android:id="@+id/menu_next_convolution_filter"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/menu_text_convulotion_filter"
+        />
 </menu>

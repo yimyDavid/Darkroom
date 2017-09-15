@@ -23,4 +23,5 @@
     <string name="action_enhance_blue_small">EB</string>
     <string name="send_to">Sharing Image</string>
     <string name="menu_next_curve_filter">Next Curve</string>
+    <string name="menu_text_convulotion_filter">Next Kernel</string>
 </resources>
