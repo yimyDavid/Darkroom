@@ -7,7 +7,7 @@ package com.applications.ctmy.darkroom;
 public class PortraCurveFilter extends CurveFilter{
     public PortraCurveFilter(){
         super(
-                new double[] {0, 23, 157, 255}, // vValIn
+                new double[] {0, 53, 157, 255}, // vValIn
                 new double[] {0, 20, 173, 255}, // vValOut
                 new double[] {0, 69, 213, 255}, // rValIn
                 new double[] {0, 69, 218, 255}, // rValOut

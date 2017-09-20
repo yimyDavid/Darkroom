@@ -647,7 +647,8 @@ public class IODarkRoom extends AppCompatActivity {
                         new PortraCurveFilter(),
                         new CrossProcessCurveFilter(),
                         new ProviaCurveFilter(),
-                        new VelviaCurveFilter()
+                        new VelviaCurveFilter(),
+                        new VintageCurveFilter()
                     };
                     mConvolutionFilters = new Filter[]{
                             new NoneFilter(),
