@@ -648,7 +648,7 @@ public class IODarkRoom extends AppCompatActivity {
                         new CrossProcessCurveFilter(),
                         new ProviaCurveFilter(),
                         new VelviaCurveFilter(),
-                        new VintageCurveFilter()
+                        //new VintageCurveFilter()
                     };
                     mConvolutionFilters = new Filter[]{
                             new NoneFilter(),
@@ -998,6 +998,7 @@ public class IODarkRoom extends AppCompatActivity {
 enum EffectType{
     E_RED, E_GREEN, E_BLUE,
     E_REDGREEN, E_GREENBLUE, E_REDBLUE,
-    GRAY, E_GRAY;
+    GRAY, E_GRAY, PORTRA,
+    PROVIA, STROKE, VELVIA, VINTAGE;
 
 }
