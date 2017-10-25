@@ -137,6 +137,48 @@
                     android:paddingRight="2dp"
                     android:paddingTop="2dp"
                     android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:id="@+id/portra_curve"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/provia_curve"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/stroke_edge"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/velvia_curve"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/vintage_curve"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/original"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@color/colorAccent" />
             </LinearLayout>
         </FrameLayout>
 
