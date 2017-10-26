@@ -108,6 +108,12 @@ public class IODarkRoom extends AppCompatActivity {
     private ImageView thumbnailRedBlue;
     private ImageView thumbnailGrey;
     private ImageView thumbnailGreyEnhanced;
+    private ImageView thumbnailPortra;
+    private ImageView thumbnailProvia;
+    private ImageView thumbnailVelvia;
+    private ImageView thumbnailStoke;
+    private ImageView thumbnailNone;
+    private ImageView thumbnailCross;
 
 
     static{
@@ -143,6 +149,11 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailRedBlue = (ImageView) findViewById(R.id.red_blue);
         thumbnailGrey = (ImageView) findViewById(R.id.grey);
         thumbnailGreyEnhanced = (ImageView) findViewById(R.id.grey_enhanced);
+        thumbnailPortra = (ImageView) findViewById(R.id.portra_curve);
+        thumbnailProvia = (ImageView) findViewById(R.id.provia_curve);
+        thumbnailCross = (ImageView) findViewById(R.id.cross_proc);
+        thumbnailVelvia = (ImageView) findViewById(R.id.velvia_curve);
+        thumbnailNone   = (ImageView) findViewById(R.id.original);
 
 
         if(savedInstanceState != null){
@@ -250,6 +261,39 @@ public class IODarkRoom extends AppCompatActivity {
 
                 currentEffect = effects.E_GRAY;
                 displayImage(gray, idMainImageView);
+            }
+        });
+
+        thumbnailPortra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Mat portra = sampledImage;
+                portra = addEffect(portra, effects.PORTRA);
+
+                currentEffect = effects.PORTRA;
+                displayImage(portra, idMainImageView);
+            }
+        });
+
+        thumbnailProvia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Mat provia = sampledImage;
+                provia = addEffect(provia, effects.PROVIA);
+
+                currentEffect = effects.PROVIA;
+                displayImage(provia, idMainImageView);
+            }
+        });
+
+        thumbnailCross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Mat cross = sampledImage;
+                cross = addEffect(cross, effects.CROSS);
+
+                currentEffect = effects.CROSS;
+                displayImage(cross, idMainImageView);
             }
         });
 
@@ -548,7 +592,21 @@ public class IODarkRoom extends AppCompatActivity {
             Mat rbMask = new Mat(sampledImage.rows(),sampledImage.cols(), sampledImage.type(), new Scalar(1,0,1,0));
             enhanceChannel(rbEnhanced, rbMask, sampledImage);
             displayImage(rbEnhanced, idMainImageView);
-        }else if(id == R.id.menu_context_curve_filter){
+        }else if(id == R.id.portra_curve){
+            if(sampledImage == null){
+                noImageMessage(getApplicationContext());
+                return true;
+            }
+
+            Mat portra = new Mat();
+            sampledImage.copyTo(portra);
+            mCurveFilters[0].apply(portra, portra);
+            displayImage(portra, idMainImageView);
+            return true;
+
+        }
+
+        else if(id == R.id.menu_context_curve_filter){
             mCurveFilterIndex++;
             if(mCurveFilterIndex == mCurveFilters.length){
                 mCurveFilterIndex = 0;
@@ -707,6 +765,9 @@ public class IODarkRoom extends AppCompatActivity {
                 int IDRedBlue = thumbnailRedBlue.getId();
                 int IDGrey = thumbnailGrey.getId();
                 int IDGreyEnhanced = thumbnailGreyEnhanced.getId();
+                int IDPortra = thumbnailPortra.getId();
+                int IDProvia = thumbnailProvia.getId();
+                int IDCross = thumbnailCross.getId();
 
                 // Using the same Mat imageThumbnail to display all the effects
                 // on the ImageView's
@@ -741,6 +802,18 @@ public class IODarkRoom extends AppCompatActivity {
                 //Mat grayEnhanced = imageThumbnail;
                 grey = addEffect(grey, effects.E_GRAY);
                 displayImage(grey, IDGreyEnhanced);
+
+                Mat portra = imageThumbnail;
+                portra = addEffect(portra, effects.PORTRA);
+                displayImage(portra, IDPortra);
+
+                Mat provia = imageThumbnail;
+                provia = addEffect(provia, effects.PROVIA);
+                displayImage(provia, IDProvia);
+
+                Mat cross = imageThumbnail;
+                cross = addEffect(cross, effects.CROSS);
+                displayImage(cross, IDCross);
             ///}
         }
 
@@ -910,6 +983,18 @@ public class IODarkRoom extends AppCompatActivity {
 
             Imgproc.equalizeHist(img, resultEffect);
         }
+        else if(effect == effects.PORTRA){
+            img.copyTo(resultEffect);
+            mCurveFilters[0].apply(img, img);
+        }
+        else if(effect == effects.PROVIA){
+            img.copyTo(resultEffect);
+            mCurveFilters[1].apply(img, img);
+        }
+        else if(effect == effects.CROSS){
+            img.copyTo(resultEffect);
+            mCurveFilters[2].apply(img, img);
+        }
 
         return resultEffect;
     }
@@ -998,7 +1083,7 @@ public class IODarkRoom extends AppCompatActivity {
 enum EffectType{
     E_RED, E_GREEN, E_BLUE,
     E_REDGREEN, E_GREENBLUE, E_REDBLUE,
-    GRAY, E_GRAY, PORTRA,
+    GRAY, E_GRAY, PORTRA, CROSS,
     PROVIA, STROKE, VELVIA, VINTAGE;
 
 }

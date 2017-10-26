@@ -111,7 +111,6 @@
                 android:titleCondensed="@string/action_enhance_red_blue_small"
                 android:visible="true"
                 app:showAsAction="ifRoom" />
-
         </menu>
     </item>
     <item
