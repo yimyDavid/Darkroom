@@ -9,6 +9,7 @@ import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
@@ -154,6 +155,7 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailCross = (ImageView) findViewById(R.id.cross_proc);
         thumbnailVelvia = (ImageView) findViewById(R.id.velvia_curve);
         thumbnailNone   = (ImageView) findViewById(R.id.original);
+        thumbnailStoke = (ImageView) findViewById(R.id.stroke_edge);
 
 
         if(savedInstanceState != null){
@@ -267,7 +269,8 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailPortra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Mat portra = sampledImage;
+                Mat portra = new Mat();
+                sampledImage.copyTo(portra);
                 portra = addEffect(portra, effects.PORTRA);
 
                 currentEffect = effects.PORTRA;
@@ -278,7 +281,8 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailProvia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Mat provia = sampledImage;
+                Mat provia = new Mat();
+                sampledImage.copyTo(provia);
                 provia = addEffect(provia, effects.PROVIA);
 
                 currentEffect = effects.PROVIA;
@@ -289,7 +293,8 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Mat cross = sampledImage;
+                Mat cross = new Mat();
+                sampledImage.copyTo(cross);
                 cross = addEffect(cross, effects.CROSS);
 
                 currentEffect = effects.CROSS;
@@ -297,6 +302,17 @@ public class IODarkRoom extends AppCompatActivity {
             }
         });
 
+        thumbnailStoke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Mat stroke = new Mat();
+                sampledImage.copyTo(stroke);
+                stroke = addEffect(stroke, effects.STROKE);
+
+                currentEffect = effects.STROKE;
+                displayImage(stroke, idMainImageView);
+            }
+        });
         /*END OF THUMBNAIL WITH EFFECTS*/
 
 
@@ -768,6 +784,7 @@ public class IODarkRoom extends AppCompatActivity {
                 int IDPortra = thumbnailPortra.getId();
                 int IDProvia = thumbnailProvia.getId();
                 int IDCross = thumbnailCross.getId();
+                int IDStroke = thumbnailStoke.getId();
 
                 // Using the same Mat imageThumbnail to display all the effects
                 // on the ImageView's
@@ -814,6 +831,10 @@ public class IODarkRoom extends AppCompatActivity {
                 Mat cross = imageThumbnail;
                 cross = addEffect(cross, effects.CROSS);
                 displayImage(cross, IDCross);
+
+                Mat stroke = imageThumbnail;
+                stroke = addEffect(stroke, effects.STROKE);
+                displayImage(stroke, IDStroke);
             ///}
         }
 
@@ -984,16 +1005,21 @@ public class IODarkRoom extends AppCompatActivity {
             Imgproc.equalizeHist(img, resultEffect);
         }
         else if(effect == effects.PORTRA){
+
             img.copyTo(resultEffect);
-            mCurveFilters[0].apply(img, img);
+            mCurveFilters[0].apply(resultEffect, resultEffect);
         }
         else if(effect == effects.PROVIA){
             img.copyTo(resultEffect);
-            mCurveFilters[1].apply(img, img);
+            mCurveFilters[1].apply(resultEffect, resultEffect);
         }
         else if(effect == effects.CROSS){
             img.copyTo(resultEffect);
-            mCurveFilters[2].apply(img, img);
+            mCurveFilters[2].apply(resultEffect, resultEffect);
+        }
+        else if(effect == effects.STROKE){
+            img.copyTo(resultEffect);
+            mConvolutionFilters[1].apply(resultEffect, resultEffect);
         }
 
         return resultEffect;

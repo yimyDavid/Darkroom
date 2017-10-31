@@ -45,7 +45,7 @@ public class CurveFilter implements Filter{
     @Override
     public void apply(final Mat src, final Mat dst){
         // Apply the lookup table.
-        System.out.println(mLUT);
+        // System.out.println(mLUT);
         Core.LUT(src, mLUT, dst);
     }
 
