@@ -156,6 +156,7 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailVelvia = (ImageView) findViewById(R.id.velvia_curve);
         thumbnailNone   = (ImageView) findViewById(R.id.original);
         thumbnailStoke = (ImageView) findViewById(R.id.stroke_edge);
+        thumbnailVelvia = (ImageView) findViewById(R.id.velvia_curve);
 
 
         if(savedInstanceState != null){
@@ -311,6 +312,18 @@ public class IODarkRoom extends AppCompatActivity {
 
                 currentEffect = effects.STROKE;
                 displayImage(stroke, idMainImageView);
+            }
+        });
+
+        thumbnailVelvia.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Mat velvia = new Mat();
+                sampledImage.copyTo(velvia);
+                velvia = addEffect(velvia, effects.VELVIA);
+
+                currentEffect = effects.VELVIA;
+                displayImage(velvia, idMainImageView);
             }
         });
         /*END OF THUMBNAIL WITH EFFECTS*/
@@ -756,13 +769,13 @@ public class IODarkRoom extends AppCompatActivity {
             else if(requestCode == SELECT_PICTURE){
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPath(selectedImageUri);
-                //Log.i(TAG, "selectedImagePath: " + selectedImagePath);
-                System.out.println(selectedImagePath + " YIMY");
+                // Log.i(TAG, "selectedImagePath: " + selectedImagePath);
+                // System.out.println(selectedImagePath + " YIMY");
                 sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
                 displayImage(sampledImage, idMainImageView);
                 //TODO Create name of the file selected. Not too happy
                 imageFileName = selectedImagePath.substring(selectedImagePath.lastIndexOf('/'), selectedImagePath.length()-4);
-                System.out.println("SELECT_PICTURE " + imageFileName);
+                // System.out.println("SELECT_PICTURE " + imageFileName);
 
             }
 
@@ -785,6 +798,8 @@ public class IODarkRoom extends AppCompatActivity {
                 int IDProvia = thumbnailProvia.getId();
                 int IDCross = thumbnailCross.getId();
                 int IDStroke = thumbnailStoke.getId();
+                int IDVelvia = thumbnailVelvia.getId();
+                int IDNone = thumbnailNone.getId();
 
                 // Using the same Mat imageThumbnail to display all the effects
                 // on the ImageView's
@@ -835,6 +850,14 @@ public class IODarkRoom extends AppCompatActivity {
                 Mat stroke = imageThumbnail;
                 stroke = addEffect(stroke, effects.STROKE);
                 displayImage(stroke, IDStroke);
+
+                Mat velvia = imageThumbnail;
+                velvia = addEffect(velvia, effects.VELVIA);
+                displayImage(velvia, IDVelvia);
+
+                Mat none = imageThumbnail;
+                none = addEffect(none, effects.NONE);
+                displayImage(none, IDNone);
             ///}
         }
 
@@ -1021,6 +1044,14 @@ public class IODarkRoom extends AppCompatActivity {
             img.copyTo(resultEffect);
             mConvolutionFilters[1].apply(resultEffect, resultEffect);
         }
+        else if(effect == effects.VELVIA){
+            img.copyTo(resultEffect);
+            mCurveFilters[3].apply(resultEffect, resultEffect);
+        }
+        else if(effect == effects.NONE){
+            img.copyTo(resultEffect);
+            mConvolutionFilters[0].apply(resultEffect, resultEffect);
+        }
 
         return resultEffect;
     }
@@ -1110,6 +1141,6 @@ enum EffectType{
     E_RED, E_GREEN, E_BLUE,
     E_REDGREEN, E_GREENBLUE, E_REDBLUE,
     GRAY, E_GRAY, PORTRA, CROSS,
-    PROVIA, STROKE, VELVIA, VINTAGE;
+    PROVIA, STROKE, VELVIA, NONE;
 
 }
