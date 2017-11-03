@@ -377,6 +377,7 @@ public class IODarkRoom extends AppCompatActivity {
 
         getSupportActionBar().setIcon(R.mipmap.ic_color_lens_white_48dp);
 
+        // TODO comment this out to hide the menu bar and use only the thumbnails
         getMenuInflater().inflate(R.menu.iodark_room, menu);
 
         // Locate MenuItem with ShareActionProvider
@@ -442,7 +443,7 @@ public class IODarkRoom extends AppCompatActivity {
             saveImageViewImage(bitmap);
 
         }else if(id == R.id.share_picture){
-            /* This method does not do or trigger anything because the action provider*/
+            /* This method does not do or trigger anything because of the action provider*/
             /*if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
@@ -473,9 +474,9 @@ public class IODarkRoom extends AppCompatActivity {
 
             if(mShareActionProvider != null)
                 mShareActionProvider.setShareIntent(prepareShareIntent());
+                return true;
 */
 
-            return true;
 
         }else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
@@ -643,8 +644,6 @@ public class IODarkRoom extends AppCompatActivity {
             }
             System.out.println("curve " + mCurveFilterIndex);
 
-            // sampledImage = loadImage(selectedImagePath, sampledImage, NORMAL_SIZE);
-            // displayImage(sampledImage, idMainImageView);
             Mat curveSampleImage = new Mat();
             sampledImage.copyTo(curveSampleImage);
             mCurveFilters[mCurveFilterIndex].apply(curveSampleImage, curveSampleImage);
@@ -757,7 +756,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         // supuestamente invalida el menu y puede refrescarlo
-        // It works!
+        // It works! It refreshes the action provider to share the images
         invalidateOptionsMenu();
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_IMAGE_CAPTURE){
@@ -778,7 +777,6 @@ public class IODarkRoom extends AppCompatActivity {
                 // System.out.println("SELECT_PICTURE " + imageFileName);
 
             }
-
                 // Mat object to add effects and display them in the imageViews views
                 imageThumbnail = loadImage(selectedImagePath, imageThumbnail, THUMBNAIL);
 
@@ -1097,7 +1095,6 @@ public class IODarkRoom extends AppCompatActivity {
 
         // Save a file: path for use with ACTION_VIEW intents
         selectedImagePath = image.getAbsolutePath();
-        System.out.println(selectedImagePath + " Yimy" );
         return image;
     }
 
@@ -1118,7 +1115,6 @@ public class IODarkRoom extends AppCompatActivity {
         ///Bitmap bmWithEffect = v.getDrawingCache();
         File root = Environment.getExternalStorageDirectory();
         File cachePath = new File(root.getAbsolutePath()  + "/Pictures/" + imageFileName + ".jpg");
-        System.out.println(root.getAbsolutePath() + imageFileName + " dfdf " + cachePath.getPath());
         try{
             cachePath.createNewFile();
             FileOutputStream ostream = new FileOutputStream(cachePath);
