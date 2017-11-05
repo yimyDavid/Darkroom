@@ -377,7 +377,7 @@ public class IODarkRoom extends AppCompatActivity {
 
         getSupportActionBar().setIcon(R.mipmap.ic_color_lens_white_48dp);
 
-        // TODO comment this out to hide the menu bar and use only the thumbnails
+
         getMenuInflater().inflate(R.menu.iodark_room, menu);
 
         // Locate MenuItem with ShareActionProvider
@@ -478,7 +478,7 @@ public class IODarkRoom extends AppCompatActivity {
 */
 
 
-        }else if(id == R.id.action_Hist){
+        }/*else if(id == R.id.action_Hist){
             Mat histImage = new Mat();
             sampledImage.copyTo(histImage);
             calcHist(histImage);
@@ -665,7 +665,7 @@ public class IODarkRoom extends AppCompatActivity {
             mConvolutionFilters[mConvolutionFilterIndex].apply(convolutionSampleImage, convolutionSampleImage);
             displayImage(convolutionSampleImage, idMainImageView);
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
