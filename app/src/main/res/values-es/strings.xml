@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Editor</string>
+    <string name="no_image">La Imagen no Existe</string>
+    <string name="load_image">Carga una image para empezar!</string>
 </resources>

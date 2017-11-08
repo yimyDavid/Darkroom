@@ -326,6 +326,18 @@ public class IODarkRoom extends AppCompatActivity {
                 displayImage(velvia, idMainImageView);
             }
         });
+
+        thumbnailNone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Mat none = new Mat();
+                sampledImage.copyTo(none);
+                none = addEffect(none, effects.NONE);
+
+                currentEffect = effects.NONE;
+                displayImage(none, idMainImageView);
+            }
+        });
         /*END OF THUMBNAIL WITH EFFECTS*/
 
 
@@ -422,11 +434,12 @@ public class IODarkRoom extends AppCompatActivity {
             return true;
 
         }else if(id == R.id.save_picture){
+            invalidateOptionsMenu();
             if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
                 // TODO: use a string resource to translate to spanish
-                System.out.println("the sample image is NULL");
+                System.out.println(R.string.no_image);
                 return true;
             }
 
@@ -447,7 +460,6 @@ public class IODarkRoom extends AppCompatActivity {
             /*if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
-                // TODO: use a string resource to translate to spanish
                 System.out.println("the sample image is NULL");
                 return true;
             }
@@ -672,7 +684,7 @@ public class IODarkRoom extends AppCompatActivity {
 
     public void noImageMessage(Context c){
 
-            Toast toast = Toast.makeText(c,"You need to load an image first!", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(c,R.string.load_image, Toast.LENGTH_SHORT);
             toast.show();
 
     }

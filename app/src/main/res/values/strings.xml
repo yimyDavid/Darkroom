@@ -24,4 +24,6 @@
     <string name="send_to">Sharing Image</string>
     <string name="menu_next_curve_filter">Next Curve</string>
     <string name="menu_text_convulotion_filter">Next Kernel</string>
+    <string name="no_image">No Image Available</string>
+    <string name="load_image">You need to load an image first!</string>
 </resources>
