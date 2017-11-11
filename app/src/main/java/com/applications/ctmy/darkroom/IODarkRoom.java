@@ -2,9 +2,11 @@ package com.applications.ctmy.darkroom;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
@@ -12,6 +14,8 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +55,7 @@ import java.net.Inet4Address;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.jar.Manifest;
 
 
 public class IODarkRoom extends AppCompatActivity {
@@ -63,7 +68,6 @@ public class IODarkRoom extends AppCompatActivity {
     private CameraBridgeViewBase mOpenCvCameraView;
 
     static final int REQUEST_IMAGE_CAPTURE = 2;
-
 
     private EffectType effects;
     private EffectType currentEffect;
@@ -133,6 +137,7 @@ public class IODarkRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
         // Hide Notification bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -438,7 +443,6 @@ public class IODarkRoom extends AppCompatActivity {
             if(sampledImage == null){
 
                 noImageMessage(getApplicationContext());
-                // TODO: use a string resource to translate to spanish
                 System.out.println(R.string.no_image);
                 return true;
             }
@@ -770,6 +774,7 @@ public class IODarkRoom extends AppCompatActivity {
         // supuestamente invalida el menu y puede refrescarlo
         // It works! It refreshes the action provider to share the images
         invalidateOptionsMenu();
+
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_IMAGE_CAPTURE){
                 galleryAddPic();
