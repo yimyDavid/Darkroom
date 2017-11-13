@@ -410,7 +410,6 @@ public class IODarkRoom extends AppCompatActivity {
         String path = root.getAbsolutePath() + "/Pictures/" + imageFileName + ".jpg";
         //Uri uriPath = Uri.parse(selectedImagePath);
         selectedImagePath = path;
-        System.out.println("onCreateOptions " + selectedImagePath);
         // Set it for the first time
         setShareIntent(prepareShareIntent());
 
@@ -447,6 +446,7 @@ public class IODarkRoom extends AppCompatActivity {
                 return true;
             }
 
+            Context c = getApplicationContext();
             Mat rgbImage = new Mat();
             Imgproc.cvtColor(originalImage, rgbImage, Imgproc.COLOR_BGR2RGB);
 
@@ -458,6 +458,10 @@ public class IODarkRoom extends AppCompatActivity {
             Bitmap bitmap = Bitmap.createBitmap(rgbImage.cols(), rgbImage.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(rgbImage, bitmap);
             saveImageViewImage(bitmap);
+
+            Toast toast = Toast.makeText(c,R.string.image_saved, Toast.LENGTH_SHORT);
+            toast.show();
+
 
         }else if(id == R.id.share_picture){
             /* This method does not do or trigger anything because of the action provider*/
