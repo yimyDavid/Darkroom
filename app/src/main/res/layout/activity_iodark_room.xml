@@ -36,13 +36,15 @@
 
 
             <LinearLayout
+                android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="0.7"
                 android:gravity="bottom"
                 android:orientation="horizontal"
                 android:paddingBottom="3dp"
-                android:paddingTop="3dp">
+                android:paddingTop="3dp"
+                android:visibility="invisible">
 
                 <!--<TextView-->
                 <!--android:layout_width="match_parent"-->

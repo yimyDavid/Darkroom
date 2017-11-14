@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -102,7 +103,7 @@ public class IODarkRoom extends AppCompatActivity {
     private int mCurveFilterIndex;
     private int mConvolutionFilterIndex;
 
-
+    LinearLayout thumbnailLayout = (LinearLayout) findViewById(R.id.thumbnail);
 
 
     private ImageView thumbnailRed;
@@ -180,6 +181,13 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(sampledImage == null){
+
+                    noImageMessage(getApplicationContext());
+                    System.out.println(R.string.no_image);
+                    return;
+                }
 
                 Mat red = sampledImage;
                 red = addEffect(red, effects.E_RED);
@@ -878,6 +886,8 @@ public class IODarkRoom extends AppCompatActivity {
                 none = addEffect(none, effects.NONE);
                 displayImage(none, IDNone);
             ///}
+
+            thumbnailLayout.setVisibility(View.VISIBLE);
         }
 
     }

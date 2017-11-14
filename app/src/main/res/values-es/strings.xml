@@ -3,4 +3,5 @@
     <string name="app_name">Editor</string>
     <string name="no_image">La Imagen no Existe</string>
     <string name="load_image">Carga una image para empezar!</string>
+    <string name="image_saved">Imagen Guardada</string>
 </resources>
