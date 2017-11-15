@@ -103,7 +103,7 @@ public class IODarkRoom extends AppCompatActivity {
     private int mCurveFilterIndex;
     private int mConvolutionFilterIndex;
 
-    LinearLayout thumbnailLayout = (LinearLayout) findViewById(R.id.thumbnail);
+    private LinearLayout thumbnailLayout;
 
 
     private ImageView thumbnailRed;
@@ -146,6 +146,7 @@ public class IODarkRoom extends AppCompatActivity {
         // Currently it seems to have no effect.
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.mipmap.ic_color_lens_white_48dp);
 
+        thumbnailLayout = (LinearLayout) findViewById(R.id.thumbnail);
         v = (ImageView)findViewById(R.id.IODarkRoomImageView);
 
         thumbnailRed = (ImageView) findViewById(R.id.red);
@@ -181,13 +182,6 @@ public class IODarkRoom extends AppCompatActivity {
         thumbnailRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(sampledImage == null){
-
-                    noImageMessage(getApplicationContext());
-                    System.out.println(R.string.no_image);
-                    return;
-                }
 
                 Mat red = sampledImage;
                 red = addEffect(red, effects.E_RED);
