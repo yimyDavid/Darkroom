@@ -13,8 +13,8 @@
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:layout_weight="80"
-        android:background="@color/mainImageView"
-        android:scaleType="centerInside" />
+        android:background="@mipmap/bg_md"
+        android:scaleType="centerCrop" />
         <!--android:src="@mipmap/ic_launcher" />-->
 
 
