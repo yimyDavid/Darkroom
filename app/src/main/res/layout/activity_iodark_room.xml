@@ -14,7 +14,7 @@
         android:layout_marginTop="0dp"
         android:layout_weight="80"
         android:background="@mipmap/bg_md"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitCenter" />
         <!--android:src="@mipmap/ic_launcher" />-->
 
 

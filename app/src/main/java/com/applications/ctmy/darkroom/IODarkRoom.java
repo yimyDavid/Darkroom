@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
@@ -133,18 +134,27 @@ public class IODarkRoom extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        requestWindowFeature(Window.FEATURE_LEFT_ICON);
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_LEFT_ICON);
+
+
+
         // Hide Notification bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_iodark_room);
         // Currently it seems to have no effect.
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.mipmap.ic_color_lens_white_48dp);
+
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#332c5987")));
+        actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#552c5987")));
+
 
         thumbnailLayout = (LinearLayout) findViewById(R.id.thumbnail);
         v = (ImageView)findViewById(R.id.IODarkRoomImageView);
