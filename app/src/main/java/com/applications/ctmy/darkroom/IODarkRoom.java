@@ -147,8 +147,9 @@ public class IODarkRoom extends AppCompatActivity {
 
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#332c5987")));
-        actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#552c5987")));
+        //actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000058")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(50, 0, 0, 0)));
+        //actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000058")));
 
 
         thumbnailLayout = (LinearLayout) findViewById(R.id.thumbnail);
