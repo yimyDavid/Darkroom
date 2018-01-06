@@ -65,6 +65,7 @@ public class IODarkRoom extends AppCompatActivity {
     private CameraBridgeViewBase mOpenCvCameraView;
 
     static final int REQUEST_IMAGE_CAPTURE = 2;
+    
 
     private EffectType effects;
     private EffectType currentEffect;
